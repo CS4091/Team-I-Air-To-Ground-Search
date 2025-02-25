@@ -1,0 +1,49 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+  "runArgs": [
+    // Name container.
+    "--name",
+    "DigginDeep",
+    // Configure container to use the same network stack as the host machine.
+    "--network",
+    "host",
+    // Grants permission to the container to access USBs.
+    "--privileged"
+  ],
+  // Mount shared workspace volumes. Bind from host machine to container.
+  "mounts": [],
+  // "image": "mcr.microsoft.com/devcontainers/base:jammy",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "adrianwilczynski.blazor-snippet-pack",
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.vscodeintellicode-csharp",
+        "kreativ-software.csharpextensions",
+        "k--kato.docomment",
+        "PKief.material-icon-theme",
+        "christian-kohler.path-intellisense",
+        "austincummings.razor-plus",
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
+      ]
+    }
+  },
+
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "dotnet tool install --global dotnet-ef --verbosity diagnostic && dotnet tool install --global dotnet-aspnet-codegenerator --verbosity diagnostic"
+
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
+}
