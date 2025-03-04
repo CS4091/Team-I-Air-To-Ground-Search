@@ -46,9 +46,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y dotnet-sdk-8.0 
     libtesseract-dev \ 
     libgdiplus
 
-# Create a symlink for pip -> pip3 (redundant but helpful for preventing bugs)
-RUN ln -s /usr/bin/pip3 /usr/bin/pip
-
 # Install required python libraries
 RUN pip install matplotlib \
     numpy \
