@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y dotnet-sdk-8.0 
     python3 \ 
     python-is-python3 \
     python3-pip \
+    python3-dev \
+    libffi-dev \
     gnome-keyring \
     sqlite3 \ 
     nano \ 
