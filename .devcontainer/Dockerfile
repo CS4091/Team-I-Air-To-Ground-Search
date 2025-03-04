@@ -45,6 +45,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y dotnet-sdk-8.0 
     libtesseract-dev \ 
     libgdiplus
 
+# Install required python libraries
+RUN pip install matplotlib \
+    numpy \
+    noise
+
 # Set Labels
 LABEL authors="WAW"
 LABEL maintainer="willweidler@mst.edu"
