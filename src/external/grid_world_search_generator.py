@@ -1,4 +1,5 @@
 import pathlib
+import json
 import random
 
 import numpy as np
@@ -16,15 +17,19 @@ from noise import snoise2
 # `pip install noise`
 
 
-def generate_grid(width, height, scale, threshold, octaves, persistence, lacunarity) -> np.ndarray:
+def generate_grid(
+    width, height, scale, threshold, octaves, persistence, lacunarity
+) -> np.ndarray:
 
     grid = np.zeros((height, width), dtype=int)
 
     for y in range(height):
         for x in range(width):
-            noise_value = snoise2(x / scale, y / scale, octaves, persistence, lacunarity)
+            noise_value = snoise2(
+                x / scale, y / scale, octaves, persistence, lacunarity
+            )
             normalized_value = (noise_value + 1) / 2
-            
+
             if normalized_value > threshold:
                 grid[y, x] = 1  # Obstacle
             else:
@@ -32,9 +37,10 @@ def generate_grid(width, height, scale, threshold, octaves, persistence, lacunar
 
     return grid
 
+
 def display_grid(grid):
-    plt.imshow(grid, cmap='gray')
-    plt.axis('off')
+    plt.imshow(grid, cmap="gray")
+    plt.axis("off")
     plt.show()
 
 
@@ -63,37 +69,53 @@ def find_start_coordinate(grid: np.ndarray):
         random_cell = grid[row_index, col_index]
         if random_cell == 0:
             break
-    
+
     return row_index, col_index
 
 
-def write_problem_params(output_filepath: pathlib.Path, grid: np.ndarray):
+def write_problem_params(output_filepath: pathlib.Path, grid: np.ndarray, fuel_range=0.4, forward_range=3, lateral_width=7):
     row, col = find_start_coordinate(grid)
     num_cells = grid.size
 
-    with open(output_filepath, 'wt') as output:
-        output.write('# Starting position\n')
-        output.write(f'{row},{col}\n')
-        output.write('# Number of moves\n')
-        output.write(f'{int(num_cells * 0.4)}')
-        output.write('# Sensor size (forward range, lateral width)\n')
-        # Width should be an odd number to make centering on the platform simple
-        # 
-        #  This example has a forward range of 3 and a width of 7.
-        #  The platform is on the bottom as the | character flying up the page.
-        #  The width is centered on the platform so it can see up to 3 columns
-        #  to the left and right in this example.  It can see up to 3 rows ahead.
-        #      +-----+
-        #      |     |
-        #      +-----+      
-        #         |
-        output.write('3,7\n')
+    # with open(output_filepath, 'wt') as output:
+    #     output.write('# Starting position\n')
+    #     output.write(f'{row},{col}\n')
+    #     output.write('# Number of moves\n')
+    #     output.write(f'{int(num_cells * 0.4)}\n')
+    #     output.write('# Sensor size (forward range, lateral width)\n')
+    #     # Width should be an odd number to make centering on the platform simple
+    #     #
+    #     #  This example has a forward range of 3 and a width of 7.
+    #     #  The platform is on the bottom as the | character flying up the page.
+    #     #  The width is centered on the platform so it can see up to 3 columns
+    #     #  to the left and right in this example.  It can see up to 3 rows ahead.
+    #     #      +-----+
+    #     #      |     |
+    #     #      +-----+
+    #     #         |
+    #     output.write('3,7\n')
 
-if __name__ == '__main__':
+    param_data = {
+        "startPosition": {
+            "row": row,
+            "col": col,
+        },
+        "numMoves": int(num_cells * fuel_range),
+        "sensorSize": {
+            "forwardRange": forward_range,
+            "lateralWidth": lateral_width,
+        }
+    }
+
+    with open(output_filepath, 'w') as f:
+        json.dump(param_data, f)
+
+
+if __name__ == "__main__":
     width = 100  # Width of the grid
     height = 100  # Height of the grid
 
-    #random.seed(42)
+    # random.seed(42)
 
     scale = 50.0
     threshold = 0.4  # Threshold for determining if noise value becomes an obstacle
@@ -101,13 +123,15 @@ if __name__ == '__main__':
     persistence = random.uniform(0.25, 4.5)
     lacunarity = random.uniform(1, 5)
 
-    print(f'Octaves: {octaves}')
-    print(f'Persistence: {persistence}')
-    print(f'Lacunarity: {lacunarity}')
+    print(f"Octaves: {octaves}")
+    print(f"Persistence: {persistence}")
+    print(f"Lacunarity: {lacunarity}")
 
-    grid = generate_grid(width, height, scale, threshold, octaves, persistence, lacunarity)
-    
-    np.savetxt('grid_world.csv', grid, delimiter=',', fmt='%d')
-    write_problem_params(pathlib.Path(f'./grid_world_params.txt'), grid)
+    grid = generate_grid(
+        width, height, scale, threshold, octaves, persistence, lacunarity
+    )
+
+    np.savetxt("grid_world.csv", grid, delimiter=",", fmt="%d")
+    write_problem_params(pathlib.Path(f"./grid_world_params.json"), grid)
 
     display_grid(grid)
