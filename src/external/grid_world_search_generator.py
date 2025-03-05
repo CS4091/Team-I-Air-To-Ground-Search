@@ -76,24 +76,17 @@ def find_start_coordinate(grid: np.ndarray):
 def write_problem_params(output_filepath: pathlib.Path, grid: np.ndarray, fuel_range=0.4, forward_range=3, lateral_width=7):
     row, col = find_start_coordinate(grid)
     num_cells = grid.size
-
-    # with open(output_filepath, 'wt') as output:
-    #     output.write('# Starting position\n')
-    #     output.write(f'{row},{col}\n')
-    #     output.write('# Number of moves\n')
-    #     output.write(f'{int(num_cells * 0.4)}\n')
-    #     output.write('# Sensor size (forward range, lateral width)\n')
-    #     # Width should be an odd number to make centering on the platform simple
-    #     #
-    #     #  This example has a forward range of 3 and a width of 7.
-    #     #  The platform is on the bottom as the | character flying up the page.
-    #     #  The width is centered on the platform so it can see up to 3 columns
-    #     #  to the left and right in this example.  It can see up to 3 rows ahead.
-    #     #      +-----+
-    #     #      |     |
-    #     #      +-----+
-    #     #         |
-    #     output.write('3,7\n')
+    
+    # Width should be an odd number to make centering on the platform simple
+    #
+    #  This example has a forward range of 3 and a width of 7.
+    #  The platform is on the bottom as the | character flying up the page.
+    #  The width is centered on the platform so it can see up to 3 columns
+    #  to the left and right in this example.  It can see up to 3 rows ahead.
+    #      +-----+
+    #      |     |
+    #      +-----+
+    #         |
 
     param_data = {
         "startPosition": {
