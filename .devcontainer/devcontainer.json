@@ -30,7 +30,10 @@
         "christian-kohler.path-intellisense",
         "austincummings.razor-plus",
         "GitHub.copilot",
-        "GitHub.copilot-chat"
+        "GitHub.copilot-chat",
+        "ms-azuretools.vscode-docker",
+        "ms-python.python",
+        "ms-python.black-formatter"
       ]
     }
   },

@@ -51,7 +51,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y dotnet-sdk-8.0 
 # Install required python libraries
 RUN pip install matplotlib \
     numpy \
-    noise
+    noise \
+    pandas
 
 # Set Labels
 LABEL authors="WAW"
