@@ -4,6 +4,7 @@ import random
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 from noise import snoise2
 
 # This script generates a 2D grid world of clear spaces and obstacles. The world
@@ -38,9 +39,17 @@ def generate_grid(
     return grid
 
 
-def display_grid(grid):
-    plt.imshow(grid, cmap="gray")
-    plt.axis("off")
+def display_grid(grid, start_coords, goal_coords):
+    cmap = mcolors.ListedColormap(['white', 'black', 'purple', 'red'])
+    bounds = [0, 1, 2, 3, 4]
+    norm = mcolors.BoundaryNorm(bounds, cmap.N)
+
+    grid[start_coords[0], start_coords[1]] = 2
+    grid[goal_coords[0], goal_coords[1]] = 3
+
+    plt.imshow(grid, cmap=cmap, norm=norm)
+    plt.axis('off')
+    plt.savefig('grid_world.png')
     plt.show()
 
 
@@ -75,6 +84,7 @@ def find_start_coordinate(grid: np.ndarray):
 
 def write_problem_params(output_filepath: pathlib.Path, grid: np.ndarray, fuel_range=0.4, forward_range=3, lateral_width=7):
     row, col = find_start_coordinate(grid)
+    goal_row, goal_col = find_start_coordinate(grid)
     num_cells = grid.size
 
     # with open(output_filepath, 'wt') as output:
@@ -109,6 +119,7 @@ def write_problem_params(output_filepath: pathlib.Path, grid: np.ndarray, fuel_r
 
     with open(output_filepath, 'w') as f:
         json.dump(param_data, f)
+    return row, col, goal_row, goal_col
 
 
 if __name__ == "__main__":
@@ -132,6 +143,6 @@ if __name__ == "__main__":
     )
 
     np.savetxt("grid_world.csv", grid, delimiter=",", fmt="%d")
-    write_problem_params(pathlib.Path(f"./grid_world_params.json"), grid)
+    row, col, goal_row, goal_col = write_problem_params(pathlib.Path(f"./grid_world_params.json"), grid)
 
-    display_grid(grid)
+    display_grid(grid, (row, col), (goal_row, goal_col))
