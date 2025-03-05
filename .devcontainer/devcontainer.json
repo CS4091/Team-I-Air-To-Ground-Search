@@ -4,7 +4,7 @@
   "runArgs": [
     // Name container.
     "--name",
-    "DigginDeep",
+    "Air-ToGround",
     // Configure container to use the same network stack as the host machine.
     "--network",
     "host",
