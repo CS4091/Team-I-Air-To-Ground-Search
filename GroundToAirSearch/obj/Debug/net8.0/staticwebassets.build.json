@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "MR3VSqsegfW6BRt0JkXWOS8uNZwddIIRoJaFaJBRoPc=",
+  "Hash": "TIVbopcw1Mjw5BQSX9aEKWEWspGIXdIP2lTPX5aU6Kc=",
   "Source": "GroundToAirSearch",
   "BasePath": "_content/GroundToAirSearch",
   "Mode": "Default",
@@ -129,6 +129,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/favicon.png"
+    },
+    {
+      "Identity": "/workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/wwwroot/outputs/grid_world.png",
+      "SourceId": "GroundToAirSearch",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/wwwroot/",
+      "BasePath": "_content/GroundToAirSearch",
+      "RelativePath": "outputs/grid_world.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/outputs/grid_world.png"
     }
   ]
 }

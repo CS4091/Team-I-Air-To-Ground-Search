@@ -28,3 +28,4 @@
 /workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/obj/Debug/net8.0/GroundToAirSearch.pdb
 /workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/obj/Debug/net8.0/GroundToAirSearch.genruntimeconfig.cache
 /workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/obj/Debug/net8.0/ref/GroundToAirSearch.dll
+/workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/bin/Debug/net8.0/src/external/outputs/grid_world_params.json
