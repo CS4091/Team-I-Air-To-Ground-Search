@@ -1,0 +1,53 @@
+{
+  "Files": [
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/obj/Debug/net8.0/scopedcss/projectbundle/AirToGroundSearch.bundle.scp.css",
+      "PackagePath": "staticwebassets/AirToGroundSearch.bundle.scp.css"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/app.css",
+      "PackagePath": "staticwebassets/app.css"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/grid_world.csv",
+      "PackagePath": "staticwebassets/outputs/grid_world.csv"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/grid_world.png",
+      "PackagePath": "staticwebassets/outputs/grid_world.png"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/grid_world_params.json",
+      "PackagePath": "staticwebassets/outputs/grid_world_params.json"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.AirToGroundSearch.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.AirToGroundSearch.props",
+      "PackagePath": "build\\AirToGroundSearch.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.AirToGroundSearch.props",
+      "PackagePath": "buildMultiTargeting\\AirToGroundSearch.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.AirToGroundSearch.props",
+      "PackagePath": "buildTransitive\\AirToGroundSearch.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
