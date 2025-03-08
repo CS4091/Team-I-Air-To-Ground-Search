@@ -22,6 +22,7 @@
         {
             <a class="btn btn-secondary" href="@imageSource" download="grid_world.png">Download Grid PNG</a>
             <a class="btn btn-secondary" href="@csvSource" download="grid_world.csv">Download Grid CSV</a>
+            <a class="btn btn-secondary" href="@jsonSource" download="grid_world_params.json">Download Grid JSON</a>
         }
     </div>
 
@@ -36,25 +37,19 @@
         }
     </ul>
 }
-<p role="status">Current Directory: @currentDirectory</p>
 
 @code {
     private List<string>? gridResultLines;
     private string? imageSource;
     private string? csvSource;
-    private string currentDirectory = "BLANK";
-
-    protected override Task OnInitializedAsync()
-    {
-        currentDirectory = Directory.GetCurrentDirectory();
-        return Task.CompletedTask;
-    }
+    private string? jsonSource;
     private void Generate()
     {
         // Run script
         runPythonScript();
-        imageSource = $"outputs/grid_world.png?{Guid.NewGuid()}";
-        csvSource = $"outputs/grid_world.csv?{Guid.NewGuid()}";
+        imageSource = $"outputs/GeneratedGrid/grid_world.png?{Guid.NewGuid()}";
+        csvSource = $"outputs/GeneratedGrid/grid_world.csv?{Guid.NewGuid()}";
+        jsonSource = $"outputs/GeneratedGrid/grid_world_params.json?{Guid.NewGuid()}";
     }
 
     private void runPythonScript()

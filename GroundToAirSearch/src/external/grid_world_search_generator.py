@@ -49,7 +49,7 @@ def display_grid(grid, start_coords, goal_coords):
 
     plt.imshow(grid, cmap=cmap, norm=norm)
     plt.axis("off")
-    plt.savefig("./wwwroot/outputs/grid_world.png")
+    plt.savefig("./wwwroot/outputs/GeneratedGrid/grid_world.png")
     # plt.show()
 
 
@@ -141,9 +141,11 @@ if __name__ == "__main__":
         width, height, scale, threshold, octaves, persistence, lacunarity
     )
 
-    np.savetxt("./wwwroot/outputs/grid_world.csv", grid, delimiter=",", fmt="%d")
+    np.savetxt(
+        "./wwwroot/outputs/GeneratedGrid/grid_world.csv", grid, delimiter=",", fmt="%d"
+    )
     row, col, goal_row, goal_col = write_problem_params(
-        pathlib.Path(f"./wwwroot/outputs/grid_world_params.json"), grid
+        pathlib.Path(f"./wwwroot/outputs/GeneratedGrid/grid_world_params.json"), grid
     )
 
     display_grid(grid, (row, col), (goal_row, goal_col))
