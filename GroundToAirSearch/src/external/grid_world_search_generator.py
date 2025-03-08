@@ -40,7 +40,7 @@ def generate_grid(
 
 
 def display_grid(grid, start_coords, goal_coords):
-    cmap = mcolors.ListedColormap(['white', 'black', 'purple', 'red'])
+    cmap = mcolors.ListedColormap(["white", "black", "purple", "red"])
     bounds = [0, 1, 2, 3, 4]
     norm = mcolors.BoundaryNorm(bounds, cmap.N)
 
@@ -48,9 +48,9 @@ def display_grid(grid, start_coords, goal_coords):
     grid[goal_coords[0], goal_coords[1]] = 3
 
     plt.imshow(grid, cmap=cmap, norm=norm)
-    plt.axis('off')
-    plt.savefig('grid_world.png')
-    plt.show()
+    plt.axis("off")
+    plt.savefig("./wwwroot/outputs/grid_world.png")
+    # plt.show()
 
 
 def find_start_coordinate(grid: np.ndarray):
@@ -82,11 +82,17 @@ def find_start_coordinate(grid: np.ndarray):
     return row_index, col_index
 
 
-def write_problem_params(output_filepath: pathlib.Path, grid: np.ndarray, fuel_range=0.4, forward_range=3, lateral_width=7):
+def write_problem_params(
+    output_filepath: pathlib.Path,
+    grid: np.ndarray,
+    fuel_range=0.4,
+    forward_range=3,
+    lateral_width=7,
+):
     row, col = find_start_coordinate(grid)
     goal_row, goal_col = find_start_coordinate(grid)
     num_cells = grid.size
-  
+
     # Width should be an odd number to make centering on the platform simple
     #
     #  This example has a forward range of 3 and a width of 7.
@@ -107,10 +113,10 @@ def write_problem_params(output_filepath: pathlib.Path, grid: np.ndarray, fuel_r
         "sensorSize": {
             "forwardRange": forward_range,
             "lateralWidth": lateral_width,
-        }
+        },
     }
 
-    with open(output_filepath, 'w') as f:
+    with open(output_filepath, "w") as f:
         json.dump(param_data, f)
     return row, col, goal_row, goal_col
 
@@ -135,7 +141,9 @@ if __name__ == "__main__":
         width, height, scale, threshold, octaves, persistence, lacunarity
     )
 
-    np.savetxt("grid_world.csv", grid, delimiter=",", fmt="%d")
-    row, col, goal_row, goal_col = write_problem_params(pathlib.Path(f"./grid_world_params.json"), grid)
+    np.savetxt("./wwwroot/outputs/grid_world.csv", grid, delimiter=",", fmt="%d")
+    row, col, goal_row, goal_col = write_problem_params(
+        pathlib.Path(f"./wwwroot/outputs/grid_world_params.json"), grid
+    )
 
     display_grid(grid, (row, col), (goal_row, goal_col))

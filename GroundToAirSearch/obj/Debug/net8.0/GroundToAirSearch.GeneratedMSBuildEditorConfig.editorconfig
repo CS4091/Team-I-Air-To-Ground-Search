@@ -22,20 +22,16 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9BcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/Components/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Db3VudGVyLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [/workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/Components/Pages/Home.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
+[/workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/Components/Pages/GenerateGrid.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9HZW5lcmF0ZUdyaWQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/Components/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9XZWF0aGVyLnJhem9y
+[/workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/Components/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [/workspaces/Team-I-Ground-to-air-Search/GroundToAirSearch/Components/Routes.razor]

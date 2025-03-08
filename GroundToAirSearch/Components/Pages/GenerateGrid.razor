@@ -1,0 +1,86 @@
+﻿@page "/GenerateGrid"
+@using System.Diagnostics
+@rendermode InteractiveServer
+
+<PageTitle>Air-to-Ground Grid Generator</PageTitle>
+
+<h1>Air-to-Ground Grid Generator</h1>
+<p>
+    This page generates a grid world for the air-to-ground search problem.
+</p>
+
+@if(imageSource is not null)
+{
+    <p>
+    <img src="@imageSource" alt="Grid World" />
+    </p>
+}
+
+    <div class="btn-group" role="group">
+        <button class="btn btn-primary" @onclick="Generate">Generate Grid</button>
+        @if (imageSource != null)
+        {
+            <a class="btn btn-secondary" href="@imageSource" download="grid_world.png">Download Grid PNG</a>
+            <a class="btn btn-secondary" href="@csvSource" download="grid_world.csv">Download Grid CSV</a>
+        }
+    </div>
+
+<p></p>
+<p role="status">Output:</p>
+@if (gridResultLines != null)
+{
+    <ul>
+        @foreach (var line in gridResultLines)
+        {
+            <li>@line</li>
+        }
+    </ul>
+}
+<p role="status">Current Directory: @currentDirectory</p>
+
+@code {
+    private List<string>? gridResultLines;
+    private string? imageSource;
+    private string? csvSource;
+    private string currentDirectory = "BLANK";
+
+    protected override Task OnInitializedAsync()
+    {
+        currentDirectory = Directory.GetCurrentDirectory();
+        return Task.CompletedTask;
+    }
+    private void Generate()
+    {
+        // Run script
+        runPythonScript();
+        imageSource = $"outputs/grid_world.png?{Guid.NewGuid()}";
+        csvSource = $"outputs/grid_world.csv?{Guid.NewGuid()}";
+    }
+
+    private void runPythonScript()
+    {
+        // Create a new process
+        var psi = new ProcessStartInfo
+        {
+            FileName = "python",
+            Arguments = "src/external/grid_world_search_generator.py",
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        // Start the process
+        using (var process = Process.Start(psi))
+        {
+            if (process != null)
+            {
+                // Read the output
+                using (var reader = process.StandardOutput)
+                {
+                    string result = reader.ReadToEnd();
+                    gridResultLines = result.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                }
+            }
+        }
+    }
+}
