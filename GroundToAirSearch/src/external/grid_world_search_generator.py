@@ -141,9 +141,9 @@ if __name__ == "__main__":
         width, height, scale, threshold, octaves, persistence, lacunarity
     )
 
-    np.savetxt("./src/external/outputs/grid_world.csv", grid, delimiter=",", fmt="%d")
+    np.savetxt("./wwwroot/outputs/grid_world.csv", grid, delimiter=",", fmt="%d")
     row, col, goal_row, goal_col = write_problem_params(
-        pathlib.Path(f"./src/external/outputs/grid_world_params.json"), grid
+        pathlib.Path(f"./wwwroot/outputs/grid_world_params.json"), grid
     )
 
     display_grid(grid, (row, col), (goal_row, goal_col))

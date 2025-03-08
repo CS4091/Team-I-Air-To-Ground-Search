@@ -16,7 +16,14 @@
     </p>
 }
 
-<button class="btn btn-primary" @onclick="Generate">Generate Grid</button>
+    <div class="btn-group" role="group">
+        <button class="btn btn-primary" @onclick="Generate">Generate Grid</button>
+        @if (imageSource != null)
+        {
+            <a class="btn btn-secondary" href="@imageSource" download="grid_world.png">Download Grid PNG</a>
+            <a class="btn btn-secondary" href="@csvSource" download="grid_world.csv">Download Grid CSV</a>
+        }
+    </div>
 
 <p></p>
 <p role="status">Output:</p>
@@ -34,6 +41,7 @@
 @code {
     private List<string>? gridResultLines;
     private string? imageSource;
+    private string? csvSource;
     private string currentDirectory = "BLANK";
 
     protected override Task OnInitializedAsync()
@@ -46,7 +54,7 @@
         // Run script
         runPythonScript();
         imageSource = $"outputs/grid_world.png?{Guid.NewGuid()}";
-        StateHasChanged(); // Trigger re-render
+        csvSource = $"outputs/grid_world.csv?{Guid.NewGuid()}";
     }
 
     private void runPythonScript()
