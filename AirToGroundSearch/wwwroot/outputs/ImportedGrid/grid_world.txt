@@ -1,0 +1,3 @@
+Octaves: 2
+Persistence: 4.425365463630506
+Lacunarity: 3.338034252741616

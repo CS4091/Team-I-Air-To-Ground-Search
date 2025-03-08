@@ -106,7 +106,20 @@
     private bool ImportedGrid = File.Exists("./wwwroot/outputs/ImportedGrid/grid_world.png");
     private string fileName = "";
     private bool gridWasGenerated = File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.png");
-    private string? imageSource = $"outputs/GeneratedGrid/grid_world.png?{Guid.NewGuid()}";
+    private string? imageSource;
+
+    protected override Task OnInitializedAsync()
+    {
+        if (File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.png"))
+        {
+            imageSource = $"outputs/GeneratedGrid/grid_world.png?{Guid.NewGuid()}";   
+        }
+        if (File.Exists("./wwwroot/outputs/ImportedGrid/grid_world.png"))
+        {
+            imageSource = $"outputs/ImportedGrid/grid_world.png?{Guid.NewGuid()}";
+        }
+        return Task.CompletedTask;
+    }
 
     private async Task UploadGrid(InputFileChangeEventArgs e)
     {

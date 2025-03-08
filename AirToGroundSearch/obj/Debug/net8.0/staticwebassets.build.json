@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "FheuQIJzCdoLmrE2Y7YZgFYxvi26uJ9tDDgq0iL7iqE=",
+  "Hash": "4JCRDW1vD5/3USysCuENcdwdgPAppigeLxPgN8zszT8=",
   "Source": "AirToGroundSearch",
   "BasePath": "_content/AirToGroundSearch",
   "Mode": "Default",
@@ -131,12 +131,12 @@
       "OriginalItemSpec": "wwwroot/favicon.png"
     },
     {
-      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/grid_world_params.json",
+      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/grid_world_params.json",
       "SourceId": "AirToGroundSearch",
       "SourceType": "Discovered",
       "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
       "BasePath": "_content/AirToGroundSearch",
-      "RelativePath": "outputs/grid_world_params.json",
+      "RelativePath": "outputs/ImportedGrid/grid_world_params.json",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -147,15 +147,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/outputs/grid_world_params.json"
+      "OriginalItemSpec": "wwwroot/outputs/ImportedGrid/grid_world_params.json"
     },
     {
-      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/grid_world.csv",
+      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/grid_world.csv",
       "SourceId": "AirToGroundSearch",
       "SourceType": "Discovered",
       "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
       "BasePath": "_content/AirToGroundSearch",
-      "RelativePath": "outputs/grid_world.csv",
+      "RelativePath": "outputs/ImportedGrid/grid_world.csv",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -166,15 +166,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/outputs/grid_world.csv"
+      "OriginalItemSpec": "wwwroot/outputs/ImportedGrid/grid_world.csv"
     },
     {
-      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/grid_world.png",
+      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/grid_world.png",
       "SourceId": "AirToGroundSearch",
       "SourceType": "Discovered",
       "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
       "BasePath": "_content/AirToGroundSearch",
-      "RelativePath": "outputs/grid_world.png",
+      "RelativePath": "outputs/ImportedGrid/grid_world.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -185,7 +185,26 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/outputs/grid_world.png"
+      "OriginalItemSpec": "wwwroot/outputs/ImportedGrid/grid_world.png"
+    },
+    {
+      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/grid_world.txt",
+      "SourceId": "AirToGroundSearch",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
+      "BasePath": "_content/AirToGroundSearch",
+      "RelativePath": "outputs/ImportedGrid/grid_world.txt",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/outputs/ImportedGrid/grid_world.txt"
     }
   ]
 }
