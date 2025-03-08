@@ -1,11 +1,15 @@
 import pathlib
 import json
 import random
+import sys
 
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from noise import snoise2
+
+# Redirect standard output to a file
+sys.stdout = open("./wwwroot/outputs/GeneratedGrid/grid_world.txt", "w")
 
 # This script generates a 2D grid world of clear spaces and obstacles. The world
 # is represented by a 2D array of zeroes and ones. Zeroes are clear free space
@@ -149,3 +153,7 @@ if __name__ == "__main__":
     )
 
     display_grid(grid, (row, col), (goal_row, goal_col))
+
+# Reset standard output to default
+sys.stdout.close()
+sys.stdout = sys.__stdout__
