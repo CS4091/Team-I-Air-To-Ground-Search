@@ -103,7 +103,7 @@
     private bool importedJSON = false;
     private bool importedCSV = false;
     private bool importedTXT = false;
-    private bool ImportedGrid = File.Exists("./wwwroot/outputs/ImportedGrid/grid_world.png");
+    private bool ImportedGrid = false;
     private string fileName = "";
     private bool gridWasGenerated = File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.png");
     private string? imageSource;
@@ -112,11 +112,14 @@
     {
         if (File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.png"))
         {
-            imageSource = $"outputs/GeneratedGrid/grid_world.png?{Guid.NewGuid()}";   
+            imageSource = $"outputs/GeneratedGrid/grid_world.png?{Guid.NewGuid()}"; 
         }
-        if (File.Exists("./wwwroot/outputs/ImportedGrid/grid_world.png"))
+        var importedGridFiles = Directory.GetFiles("./wwwroot/outputs/ImportedGrid", "*.png");
+        if (importedGridFiles.Any())
         {
-            imageSource = $"outputs/ImportedGrid/grid_world.png?{Guid.NewGuid()}";
+            var fileName = Path.GetFileName(importedGridFiles.First());
+            imageSource = $"outputs/ImportedGrid/{fileName}?{Guid.NewGuid()}";
+            ImportedGrid = true;
         }
         return Task.CompletedTask;
     }
@@ -136,7 +139,7 @@
         if (fileName.Contains(".png"))
         {
             importedPNG = true;
-            imageSource = $"outputs/ImportedGrid/grid_world.png?{Guid.NewGuid()}";
+            imageSource = $"outputs/ImportedGrid/{fileName}?{Guid.NewGuid()}";
         }
         if (fileName.Contains(".json"))
         {
@@ -185,11 +188,12 @@
 
     private async Task deleteImportedGrid()
     {
-        // Delete imported grid files
-        File.Delete("wwwroot/outputs/ImportedGrid/grid_world.png");
-        File.Delete("wwwroot/outputs/ImportedGrid/grid_world.csv");
-        File.Delete("wwwroot/outputs/ImportedGrid/grid_world_params.json");
-        File.Delete("wwwroot/outputs/ImportedGrid/grid_world.txt");
+        // Delete all files in the ImportedGrid directory
+        var importedGridFiles = Directory.GetFiles("wwwroot/outputs/ImportedGrid");
+        foreach (var file in importedGridFiles)
+        {
+            File.Delete(file);
+        }
 
         // Reset states
         imageSource = null;
@@ -201,10 +205,12 @@
 
         if (gridWasGenerated)
         {
-            File.Delete("wwwroot/outputs/GeneratedGrid/grid_world.png");
-            File.Delete("wwwroot/outputs/GeneratedGrid/grid_world.csv");
-            File.Delete("wwwroot/outputs/GeneratedGrid/grid_world_params.json");
-            File.Delete("wwwroot/outputs/GeneratedGrid/grid_world.txt");
+            // Delete all files in the GeneratedGrid directory
+            var generatedGridFiles = Directory.GetFiles("wwwroot/outputs/GeneratedGrid");
+            foreach (var file in generatedGridFiles)
+            {
+                File.Delete(file);
+            }
             gridWasGenerated = false;
         }
 
@@ -212,6 +218,7 @@
         clearFileInputs = true;
         await Task.Delay(10); // Ensure the render cycle completes
         clearFileInputs = false;
+        ImportedGrid = false;
     }
 
 }

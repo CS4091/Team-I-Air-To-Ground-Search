@@ -100,10 +100,13 @@
         // Delete the generated grid
         if (imageSource != null && csvSource != null && jsonSource != null && txtSource != null)
         {
-            File.Delete("wwwroot/outputs/GeneratedGrid/grid_world.png");
-            File.Delete("wwwroot/outputs/GeneratedGrid/grid_world.csv");
-            File.Delete("wwwroot/outputs/GeneratedGrid/grid_world_params.json");
-            File.Delete("wwwroot/outputs/GeneratedGrid/grid_world.txt");
+            // Delete all files in the GeneratedGrid directory
+            var generatedGridFiles = Directory.GetFiles("wwwroot/outputs/GeneratedGrid");
+            foreach (var file in generatedGridFiles)
+            {
+                File.Delete(file);
+            }
+            gridWasGenerated = false;
             imageSource = null;
             csvSource = null;
             jsonSource = null;
