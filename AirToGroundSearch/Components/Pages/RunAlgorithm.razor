@@ -125,10 +125,32 @@
     }
 
     private async Task UploadGrid(InputFileChangeEventArgs e)
-    {
+    {   
+        ImportedGrid = false;
         // Get the uploaded file
         var file = e.File;
         fileName = file.Name;
+        // Delete all files in the ImportedGrid directory
+        var importedGridFiles = Directory.GetFiles("wwwroot/outputs/ImportedGrid");
+        foreach (var importedFile in importedGridFiles)
+        {
+            if (importedFile.Contains(".png") && fileName.Contains(".png"))
+            {
+                File.Delete(importedFile);
+            }
+            if (importedFile.Contains(".json") && fileName.Contains(".json"))
+            {
+                File.Delete(importedFile);
+            }
+            if (importedFile.Contains(".csv") && fileName.Contains(".csv"))
+            {
+                File.Delete(importedFile);
+            }
+            if (importedFile.Contains(".txt") && fileName.Contains(".txt"))
+            {
+                File.Delete(importedFile);
+            }
+        }
         // Save the file
         var filePath = $"./wwwroot/outputs/ImportedGrid/{fileName}";
         await using (var fileStream = file.OpenReadStream())
@@ -156,6 +178,10 @@
         if (importedPNG && importedJSON && importedCSV && importedTXT)
         {
             ImportedGrid = true;
+            importedPNG = false;
+            importedJSON = false;
+            importedCSV = false;
+            importedTXT = false;
         }
     }
 

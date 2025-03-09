@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AirToGroundSearch")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad6e2a7a1c95194f6fb3e22a7d4c18cf345747e5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a394377711c4cbadade154faaeeb3ce3f2388105")]
 [assembly: System.Reflection.AssemblyProductAttribute("AirToGroundSearch")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AirToGroundSearch")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
