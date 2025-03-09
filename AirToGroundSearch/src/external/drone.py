@@ -91,7 +91,7 @@ def print_grid_with_drone(grid, drone):
 
 
 if __name__ == "__main__":
-    grid_filepath = pathlib.Path("./wwwroot/outputs/grid_world.csv")
+    grid_filepath = pathlib.Path("./wwwroot/outputs/GeneratedGrid/grid_world.csv")
     grid = read_grid_from_csv(grid_filepath)
 
     start_row, start_col = find_start_coordinate(grid)

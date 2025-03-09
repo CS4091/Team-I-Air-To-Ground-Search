@@ -9,54 +9,60 @@
     This page generates a grid world for the air-to-ground search problem.
 </p>
 
-@if(imageSource is not null)
+@if(gridWasGenerated)
 {
     <p>
     <img src="@imageSource" alt="Grid World" />
     </p>
 }
 
-    <div class="btn-group" role="group">
-        <button class="btn btn-primary" @onclick="Generate">Generate Grid</button>
-        @if (imageSource != null)
-        {
-            <a class="btn btn-secondary" href="@imageSource" download="grid_world.png">Download Grid PNG</a>
-            <a class="btn btn-secondary" href="@csvSource" download="grid_world.csv">Download Grid CSV</a>
-        }
-    </div>
+<div class="btn-group" role="group">
+    <button class="btn btn-primary" @onclick="runPythonScript">Generate Grid</button>
+    @if (gridWasGenerated)
+    {
+        <a class="btn btn-secondary" href="@imageSource" download="grid_world.png">Download Grid PNG</a>
+        <a class="btn btn-secondary" href="@csvSource" download="grid_world.csv">Download Grid CSV</a>
+        <a class="btn btn-secondary" href="@jsonSource" download="grid_world_params.json">Download Grid JSON</a>
+        <a class="btn btn-secondary" href="@txtSource" download="grid_world.txt">Download Grid TXT</a>
+    }
+</div>
 
 <p></p>
-<p role="status">Output:</p>
-@if (gridResultLines != null)
+@if (File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.txt"))
 {
+    <p role="status">Output:</p>
     <ul>
-        @foreach (var line in gridResultLines)
+        @if (gridResultLines != null)
         {
-            <li>@line</li>
+            @foreach (var line in gridResultLines)
+            {
+                <li>@line</li>
+            }
         }
     </ul>
 }
-<p role="status">Current Directory: @currentDirectory</p>
+
+@if (gridWasGenerated)
+{
+    <button class="btn btn-primary" @onclick="deleteGeneratedGrid">Clear Grid</button>
+}
 
 @code {
     private List<string>? gridResultLines;
-    private string? imageSource;
-    private string? csvSource;
-    private string currentDirectory = "BLANK";
+    private string? imageSource = $"outputs/GeneratedGrid/grid_world.png?{Guid.NewGuid()}";
+    private string? csvSource = $"outputs/GeneratedGrid/grid_world.csv?{Guid.NewGuid()}";
+    private string? jsonSource = $"outputs/GeneratedGrid/grid_world_params.json?{Guid.NewGuid()}";
+    private string? txtSource = $"outputs/GeneratedGrid/grid_world.txt?{Guid.NewGuid()}";
+    private bool gridWasGenerated = File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.png");
 
     protected override Task OnInitializedAsync()
     {
-        currentDirectory = Directory.GetCurrentDirectory();
+        if(File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.txt"))
+        {
+            gridResultLines = File.ReadAllText("./wwwroot/outputs/GeneratedGrid/grid_world.txt").Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        }
         return Task.CompletedTask;
     }
-    private void Generate()
-    {
-        // Run script
-        runPythonScript();
-        imageSource = $"outputs/grid_world.png?{Guid.NewGuid()}";
-        csvSource = $"outputs/grid_world.csv?{Guid.NewGuid()}";
-    }
-
     private void runPythonScript()
     {
         // Create a new process
@@ -64,23 +70,48 @@
         {
             FileName = "python",
             Arguments = "src/external/grid_world_search_generator.py",
-            RedirectStandardOutput = true,
+            RedirectStandardOutput = false, // No need to redirect standard output
             UseShellExecute = false,
             CreateNoWindow = true
         };
-
         // Start the process
         using (var process = Process.Start(psi))
         {
-            if (process != null)
+            process?.WaitForExit(); // Wait for the process to exit
+        }
+
+        // Read the output from the txt file
+        string txtFilePath = "./wwwroot/outputs/GeneratedGrid/grid_world.txt";
+        if (File.Exists(txtFilePath))
+        {
+            string result = File.ReadAllText(txtFilePath);
+            gridResultLines = result.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        }
+
+        gridWasGenerated = true;
+        imageSource = $"outputs/GeneratedGrid/grid_world.png?{Guid.NewGuid()}";
+        csvSource = $"outputs/GeneratedGrid/grid_world.csv?{Guid.NewGuid()}";
+        jsonSource = $"outputs/GeneratedGrid/grid_world_params.json?{Guid.NewGuid()}";
+        txtSource = $"outputs/GeneratedGrid/grid_world.txt?{Guid.NewGuid()}";
+    }
+
+    private void deleteGeneratedGrid()
+    {
+        // Delete the generated grid
+        if (imageSource != null && csvSource != null && jsonSource != null && txtSource != null)
+        {
+            // Delete all files in the GeneratedGrid directory
+            var generatedGridFiles = Directory.GetFiles("wwwroot/outputs/GeneratedGrid");
+            foreach (var file in generatedGridFiles)
             {
-                // Read the output
-                using (var reader = process.StandardOutput)
-                {
-                    string result = reader.ReadToEnd();
-                    gridResultLines = result.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                }
+                File.Delete(file);
             }
+            gridWasGenerated = false;
+            imageSource = null;
+            csvSource = null;
+            jsonSource = null;
+            gridWasGenerated = false;
+            gridResultLines = null;
         }
     }
 }

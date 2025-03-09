@@ -9,8 +9,7 @@ import math
 def h(x, y, g_x, g_y):
     # Heuristic cost-estimation function
     # returns the straight-line distance between the goal and current node
-    return math.sqrt((g_x - x)**2 + (g_y - y)**2)
-    
+    return math.sqrt((g_x - x) ** 2 + (g_y - y) ** 2)
 
 
 def a_star_search(
@@ -18,7 +17,7 @@ def a_star_search(
     start_index: Tuple[int, int],
     radar_range: Tuple[int, int],
     goal_coords: Tuple[int, int],
-    direction: int = 0, # 0: N, 1: S, 2: E, 3: W
+    direction: int = 0,  # 0: N, 1: S, 2: E, 3: W
 ):
     start_row, start_col = start_index
     range_row, range_col = radar_range
@@ -39,3 +38,6 @@ def a_star_search(
 
     while open_set is not None:
         pass
+
+
+print("TEST")
