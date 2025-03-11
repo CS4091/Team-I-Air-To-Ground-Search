@@ -218,7 +218,10 @@
         var importedGridFiles = Directory.GetFiles("wwwroot/outputs/ImportedGrid");
         foreach (var file in importedGridFiles)
         {
-            File.Delete(file);
+            @if(!file.Contains(".gitignore"))
+            {
+                File.Delete(file);
+            }
         }
 
         // Reset states
@@ -235,7 +238,10 @@
             var generatedGridFiles = Directory.GetFiles("wwwroot/outputs/GeneratedGrid");
             foreach (var file in generatedGridFiles)
             {
-                File.Delete(file);
+                @if(!file.Contains(".gitignore"))
+                    {
+                        File.Delete(file);
+                    }
             }
             gridWasGenerated = false;
         }
