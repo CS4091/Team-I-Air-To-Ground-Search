@@ -121,7 +121,7 @@ def print_grid_with_drone(grid, drone):
 
 
 if __name__ == "__main__":
-    grid_filepath = pathlib.Path("./wwwroot/outputs/GeneratedGrid/grid_world.csv")
+    grid_filepath = pathlib.Path("AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.csv")
     grid = read_grid_from_csv(grid_filepath)
     scanned_grid = np.zeros_like(grid)
 
