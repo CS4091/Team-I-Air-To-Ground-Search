@@ -69,9 +69,40 @@ class Drone:
         return self.row, self.col
 
 
+
 def read_grid_from_csv(filepath):
     return np.loadtxt(filepath, delimiter=",", dtype=int)
 
+def update_scanned_grid(drone, scanned_grid):
+    if drone.direction == Direction.UP:
+        view = [
+            (drone.row - 1, drone.col - 1), (drone.row - 1, drone.col), (drone.row - 1, drone.col + 1),
+            (drone.row, drone.col - 1), (drone.row, drone.col), (drone.row, drone.col + 1)
+        ]
+    elif drone.direction == Direction.DOWN:
+        view = [
+            (drone.row + 1, drone.col - 1), (drone.row + 1, drone.col), (drone.row + 1, drone.col + 1),
+            (drone.row, drone.col - 1), (drone.row, drone.col), (drone.row, drone.col + 1)
+        ]
+    elif drone.direction == Direction.LEFT:
+        view = [
+            (drone.row - 1, drone.col - 1), (drone.row, drone.col - 1), (drone.row + 1, drone.col - 1),
+            (drone.row - 1, drone.col), (drone.row, drone.col), (drone.row + 1, drone.col)
+        ]
+    elif drone.direction == Direction.RIGHT:
+        view = [
+            (drone.row - 1, drone.col + 1), (drone.row, drone.col + 1), (drone.row + 1, drone.col + 1),
+            (drone.row - 1, drone.col), (drone.row, drone.col), (drone.row + 1, drone.col)
+        ]
+
+    for r, c in view:
+        if 0 <= r < scanned_grid.shape[0] and 0 <= c < scanned_grid.shape[1]:
+            scanned_grid[r, c] = 1
+
+def calculate_coverage(scanned_grid, grid):
+    navigable_tiles = np.sum(grid == 0)
+    scanned_tiles = np.sum((scanned_grid == 1) & (grid == 0))
+    return (scanned_tiles / navigable_tiles) * 100
 
 def find_start_coordinate(grid):
     while True:
@@ -80,7 +111,6 @@ def find_start_coordinate(grid):
         col_index = random_index % grid.shape[1]
         if grid[row_index, col_index] == 0:
             return row_index, col_index
-
 
 def print_grid_with_drone(grid, drone):
     grid_copy = grid.copy()
@@ -93,22 +123,18 @@ def print_grid_with_drone(grid, drone):
 if __name__ == "__main__":
     grid_filepath = pathlib.Path("./wwwroot/outputs/GeneratedGrid/grid_world.csv")
     grid = read_grid_from_csv(grid_filepath)
+    scanned_grid = np.zeros_like(grid)
 
     start_row, start_col = find_start_coordinate(grid)
     drone = Drone(grid, start_row, start_col)
 
     while True:
+        update_scanned_grid(drone, scanned_grid)
         print_grid_with_drone(grid, drone)
-        print(
-            f"Drone current position: {drone.get_position()}, facing {drone.direction.name}"
-        )
-        command = (
-            input(
-                "Enter command (S for straight, L for left, R for right, Q to quit): "
-            )
-            .strip()
-            .upper()
-        )
+        print(f"Drone current position: {drone.get_position()}, facing {drone.direction.name}")
+        coverage = calculate_coverage(scanned_grid, grid)
+        print(f"Coverage: {coverage:.2f}%")
+        command = input("Enter command (S for straight, L for left, R for right, Q to quit): ").strip().upper()
         if command == "S":
             drone.move_straight()
         elif command == "L":
@@ -121,3 +147,5 @@ if __name__ == "__main__":
             print("Invalid command. Please enter S, L, R, or Q.")
 
     print("Drone final position:", drone.get_position())
+    coverage = calculate_coverage(scanned_grid, grid)
+    print(f"Final Coverage: {coverage:.2f}%")
