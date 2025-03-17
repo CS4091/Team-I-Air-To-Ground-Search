@@ -43,13 +43,12 @@ def generate_grid(
     return grid
 
 
-def display_grid(grid, start_coords, goal_coords):
-    cmap = mcolors.ListedColormap(["white", "black", "purple", "red"])
+def display_grid(grid, start_coords):
+    cmap = mcolors.ListedColormap(["black", "white", "red", "purple"])
     bounds = [0, 1, 2, 3, 4]
     norm = mcolors.BoundaryNorm(bounds, cmap.N)
 
     grid[start_coords[0], start_coords[1]] = 2
-    grid[goal_coords[0], goal_coords[1]] = 3
 
     plt.imshow(grid, cmap=cmap, norm=norm)
     plt.axis("off")
@@ -80,7 +79,7 @@ def find_start_coordinate(grid: np.ndarray):
 
         # Check if the coordinate is clear of obstacles
         random_cell = grid[row_index, col_index]
-        if random_cell == 0:
+        if random_cell == 1:
             break
 
     return row_index, col_index
@@ -94,7 +93,6 @@ def write_problem_params(
     lateral_width=7,
 ):
     row, col = find_start_coordinate(grid)
-    goal_row, goal_col = find_start_coordinate(grid)
     num_cells = grid.size
 
     # Width should be an odd number to make centering on the platform simple
@@ -122,7 +120,7 @@ def write_problem_params(
 
     with open(output_filepath, "w") as f:
         json.dump(param_data, f)
-    return row, col, goal_row, goal_col
+    return row, col
 
 
 if __name__ == "__main__":
@@ -148,11 +146,11 @@ if __name__ == "__main__":
     np.savetxt(
         "./wwwroot/outputs/GeneratedGrid/grid_world.csv", grid, delimiter=",", fmt="%d"
     )
-    row, col, goal_row, goal_col = write_problem_params(
+    row, col = write_problem_params(
         pathlib.Path(f"./wwwroot/outputs/GeneratedGrid/grid_world_params.json"), grid
     )
 
-    display_grid(grid, (row, col), (goal_row, goal_col))
+    display_grid(grid, (row, col))
 
 # Reset standard output to default
 sys.stdout.close()
