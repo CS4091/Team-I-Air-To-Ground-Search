@@ -2,7 +2,7 @@
 @using System.Diagnostics
 @rendermode InteractiveServer
 
-<PageTitle>Air-to-Ground Grid Generator</PageTitle>
+<PageTitle>Air-to-Ground Pathing Algorithm Runner</PageTitle>
 
 <h1>Air-to-Ground Pathing Algorithm Runner</h1>
 <p>
@@ -130,25 +130,48 @@
         // Get the uploaded file
         var file = e.File;
         fileName = file.Name;
+        // Delete all files in the GeneratedGrid directory
+        var generatedGridFiles = Directory.GetFiles("wwwroot/outputs/GeneratedGrid");
+        foreach (var importedFile in generatedGridFiles)
+        {
+            @if(!importedFile.Contains(".gitignore"))
+            {
+                File.Delete(importedFile);
+            }
+            gridWasGenerated = false;
+        }
         // Delete all files in the ImportedGrid directory
         var importedGridFiles = Directory.GetFiles("wwwroot/outputs/ImportedGrid");
-        foreach (var importedFile in importedGridFiles)
+        if(!importedPNG && !importedJSON && !importedCSV && !importedTXT && !ImportedGrid)
         {
-            if (importedFile.Contains(".png") && fileName.Contains(".png"))
+            foreach (var importedFile in importedGridFiles)
             {
-                File.Delete(importedFile);
+                @if(!importedFile.Contains(".gitignore"))
+                {
+                    File.Delete(importedFile);
+                }
             }
-            if (importedFile.Contains(".json") && fileName.Contains(".json"))
+        }
+        else
+        {
+            foreach (var importedFile in importedGridFiles)
             {
-                File.Delete(importedFile);
-            }
-            if (importedFile.Contains(".csv") && fileName.Contains(".csv"))
-            {
-                File.Delete(importedFile);
-            }
-            if (importedFile.Contains(".txt") && fileName.Contains(".txt"))
-            {
-                File.Delete(importedFile);
+                if (importedFile.Contains(".png") && fileName.Contains(".png"))
+                {
+                    File.Delete(importedFile);
+                }
+                if (importedFile.Contains(".json") && fileName.Contains(".json"))
+                {
+                    File.Delete(importedFile);
+                }
+                if (importedFile.Contains(".csv") && fileName.Contains(".csv"))
+                {
+                    File.Delete(importedFile);
+                }
+                if (importedFile.Contains(".txt") && fileName.Contains(".txt"))
+                {
+                    File.Delete(importedFile);
+                }
             }
         }
         // Save the file

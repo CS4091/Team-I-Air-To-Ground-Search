@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "94pOQRERjhFSIrt9si7AoUB20UgYSyDy59jGkdWFfC8=",
+  "Hash": "BgZTrQjZ9v9sUFmtnqYJb58DxbAztqINLzMgEpAtCV8=",
   "Source": "AirToGroundSearch",
   "BasePath": "_content/AirToGroundSearch",
   "Mode": "Default",
@@ -131,12 +131,12 @@
       "OriginalItemSpec": "wwwroot/favicon.png"
     },
     {
-      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/.gitkeep",
+      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/.gitignore",
       "SourceId": "AirToGroundSearch",
       "SourceType": "Discovered",
       "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
       "BasePath": "_content/AirToGroundSearch",
-      "RelativePath": "outputs/GeneratedGrid/.gitkeep",
+      "RelativePath": "outputs/GeneratedGrid/.gitignore",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -147,15 +147,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/outputs/GeneratedGrid/.gitkeep"
+      "OriginalItemSpec": "wwwroot/outputs/GeneratedGrid/.gitignore"
     },
     {
-      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/.gitkeep",
+      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/.gitignore",
       "SourceId": "AirToGroundSearch",
       "SourceType": "Discovered",
       "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
       "BasePath": "_content/AirToGroundSearch",
-      "RelativePath": "outputs/ImportedGrid/.gitkeep",
+      "RelativePath": "outputs/ImportedGrid/.gitignore",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -166,7 +166,26 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/outputs/ImportedGrid/.gitkeep"
+      "OriginalItemSpec": "wwwroot/outputs/ImportedGrid/.gitignore"
+    },
+    {
+      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/grid_world.csv",
+      "SourceId": "AirToGroundSearch",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
+      "BasePath": "_content/AirToGroundSearch",
+      "RelativePath": "outputs/ImportedGrid/grid_world.csv",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/outputs/ImportedGrid/grid_world.csv"
     }
   ]
 }

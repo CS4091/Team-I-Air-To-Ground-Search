@@ -21,12 +21,16 @@
       "PackagePath": "staticwebassets/favicon.png"
     },
     {
-      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/.gitkeep",
-      "PackagePath": "staticwebassets/outputs/GeneratedGrid/.gitkeep"
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/.gitignore",
+      "PackagePath": "staticwebassets/outputs/GeneratedGrid/.gitignore"
     },
     {
-      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/.gitkeep",
-      "PackagePath": "staticwebassets/outputs/ImportedGrid/.gitkeep"
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/.gitignore",
+      "PackagePath": "staticwebassets/outputs/ImportedGrid/.gitignore"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/grid_world.csv",
+      "PackagePath": "staticwebassets/outputs/ImportedGrid/grid_world.csv"
     },
     {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.AirToGroundSearch.Microsoft.AspNetCore.StaticWebAssets.props",
