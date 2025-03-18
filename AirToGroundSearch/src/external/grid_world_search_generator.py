@@ -42,9 +42,8 @@ def generate_grid(
 
     return grid
 
-
 def display_grid(grid, start_coords):
-    cmap = mcolors.ListedColormap(["black", "white", "red", "purple"])
+    cmap = mcolors.ListedColormap(["black", "white", "red", "green", "purple"])
     bounds = [0, 1, 2, 3, 4]
     norm = mcolors.BoundaryNorm(bounds, cmap.N)
 
@@ -53,7 +52,7 @@ def display_grid(grid, start_coords):
     plt.imshow(grid, cmap=cmap, norm=norm)
     plt.axis("off")
     plt.savefig("./wwwroot/outputs/GeneratedGrid/grid_world.png")
-    # plt.show()
+    # plt.show()"""
 
 
 def find_start_coordinate(grid: np.ndarray):
@@ -143,14 +142,15 @@ if __name__ == "__main__":
         width, height, scale, threshold, octaves, persistence, lacunarity
     )
 
-    np.savetxt(
-        "./wwwroot/outputs/GeneratedGrid/grid_world.csv", grid, delimiter=",", fmt="%d"
-    )
     row, col = write_problem_params(
         pathlib.Path(f"./wwwroot/outputs/GeneratedGrid/grid_world_params.json"), grid
     )
 
     display_grid(grid, (row, col))
+
+    np.savetxt(
+        "./wwwroot/outputs/GeneratedGrid/grid_world.csv", grid, delimiter=",", fmt="%d"
+    )
 
 # Reset standard output to default
 sys.stdout.close()

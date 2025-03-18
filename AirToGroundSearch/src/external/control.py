@@ -1,6 +1,9 @@
 import numpy as np
 import pathlib
 import random
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+
 from drone import Drone, read_grid_from_csv, find_start_coordinate, print_grid_with_drone, update_scanned_grid, calculate_coverage
 
 def manual_control(drone, grid, scanned_grid):
@@ -32,7 +35,7 @@ def random_movement(drone, grid, scanned_grid, max_moves):
     moves = 0
     while moves < max_moves:
         update_scanned_grid(drone, scanned_grid)
-        #print_grid_with_drone(grid, drone)
+        print_grid_with_drone(grid, drone)
         print(f"Drone current position: {drone.get_position()}, facing {drone.direction.name}")
         coverage = calculate_coverage(scanned_grid, grid)
         print(f"Coverage: {coverage:.2f}%")
@@ -52,6 +55,21 @@ def random_movement(drone, grid, scanned_grid, max_moves):
     print("Drone final position:", drone.get_position())
     coverage = calculate_coverage(scanned_grid, grid)
     print(f"Final Coverage: {coverage:.2f}%")
+
+def update_grid(grid, scanned_grid):
+    cmap = mcolors.ListedColormap(["black", "white", "red", "purple", "green"])
+    bounds = [0, 1, 2, 3, 4]
+    norm = mcolors.BoundaryNorm(bounds, cmap.N)
+  
+    for i in range(scanned_grid.shape[0]):
+        for j in range(scanned_grid.shape[1]):
+            if scanned_grid[i, j] == 1:
+                grid[i, j] = 3
+
+    plt.imshow(grid, cmap=cmap, norm=norm)
+    plt.axis("off")
+    plt.savefig("./wwwroot/outputs/GeneratedGrid/grid_world.png")
+
 
 if __name__ == "__main__":
     grid_filepath = pathlib.Path("AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.csv")
@@ -73,3 +91,4 @@ if __name__ == "__main__":
         random_movement(drone, grid, scanned_grid, max_moves)
     else:
         print("Invalid mode selected.")
+    update_grid(grid, scanned_grid)
