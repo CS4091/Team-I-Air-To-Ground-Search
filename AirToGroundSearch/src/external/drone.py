@@ -1,5 +1,4 @@
 import numpy as np
-import pathlib
 from enum import Enum
 
 
@@ -118,34 +117,3 @@ def print_grid_with_drone(grid, drone):
     for row in grid_copy:
         print(" ".join(str(cell) for cell in row))
     print()
-
-
-if __name__ == "__main__":
-    grid_filepath = pathlib.Path("AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.csv")
-    grid = read_grid_from_csv(grid_filepath)
-    scanned_grid = np.zeros_like(grid)
-
-    start_row, start_col = find_start_coordinate(grid)
-    drone = Drone(grid, start_row, start_col)
-
-    while True:
-        update_scanned_grid(drone, scanned_grid)
-        print_grid_with_drone(grid, drone)
-        print(f"Drone current position: {drone.get_position()}, facing {drone.direction.name}")
-        coverage = calculate_coverage(scanned_grid, grid)
-        print(f"Coverage: {coverage:.2f}%")
-        command = input("Enter command (S for straight, L for left, R for right, Q to quit): ").strip().upper()
-        if command == "S":
-            drone.move_straight()
-        elif command == "L":
-            drone.turn_left()
-        elif command == "R":
-            drone.turn_right()
-        elif command == "Q":
-            break
-        else:
-            print("Invalid command. Please enter S, L, R, or Q.")
-
-    print("Drone final position:", drone.get_position())
-    coverage = calculate_coverage(scanned_grid, grid)
-    print(f"Final Coverage: {coverage:.2f}%")
