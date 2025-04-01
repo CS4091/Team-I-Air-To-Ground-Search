@@ -9,47 +9,47 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = AirToGroundSearch
 build_property.RootNamespace = AirToGroundSearch
-build_property.ProjectDir = /workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/
+build_property.ProjectDir = /workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = /workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch
+build_property.MSBuildProjectDirectory = /workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch
 build_property._RazorSourceGeneratorDebug = 
 
-[/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/Components/App.razor]
+[/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/Components/App.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9BcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/Components/Pages/Error.razor]
+[/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/Components/Pages/GenerateGrid.razor]
+[/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/Components/Pages/GenerateGrid.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9HZW5lcmF0ZUdyaWQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/Components/Pages/Home.razor]
+[/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/Components/Pages/RunAlgorithm.razor]
+[/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/Components/Pages/RunAlgorithm.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9SdW5BbGdvcml0aG0ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/Components/Routes.razor]
+[/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9Sb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/Components/_Imports.razor]
+[/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/Components/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9fSW1wb3J0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/Components/Layout/MainLayout.razor]
+[/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/Components/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTWFpbkxheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-di1aip8vpg
 
-[/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/Components/Layout/NavMenu.razor]
+[/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/Components/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-3d3k4gsj70

@@ -72,7 +72,8 @@ class Drone:
 def read_grid_from_csv(filepath):
     return np.loadtxt(filepath, delimiter=",", dtype=int)
 
-def update_scanned_grid(drone, scanned_grid):
+def update_scanned_grid(drone, grid, scanned_grid):
+    # Define the drone's view based on its direction
     if drone.direction == Direction.UP:
         view = [
             (drone.row - 1, drone.col - 1), (drone.row - 1, drone.col), (drone.row - 1, drone.col + 1),
@@ -94,9 +95,10 @@ def update_scanned_grid(drone, scanned_grid):
             (drone.row - 1, drone.col), (drone.row, drone.col), (drone.row + 1, drone.col)
         ]
 
+    # Mark tiles in the scanned grid based on the original grid
     for r, c in view:
-        if 0 <= r < scanned_grid.shape[0] and 0 <= c < scanned_grid.shape[1]:
-            scanned_grid[r, c] = 1
+        if 0 <= r < grid.shape[0] and 0 <= c < grid.shape[1]:
+            scanned_grid[r, c] = 1  # Mark as scanned
 
 def calculate_coverage(scanned_grid, grid):
     navigable_tiles = np.sum(grid == 0)

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/AirToGroundSearch.csproj": {}
+    "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/AirToGroundSearch.csproj": {}
   },
   "projects": {
-    "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/AirToGroundSearch.csproj": {
+    "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/AirToGroundSearch.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/AirToGroundSearch.csproj",
+        "projectUniqueName": "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/AirToGroundSearch.csproj",
         "projectName": "AirToGroundSearch",
-        "projectPath": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/AirToGroundSearch.csproj",
+        "projectPath": "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/AirToGroundSearch.csproj",
         "packagesPath": "/root/.nuget/packages/",
-        "outputPath": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/obj/",
+        "outputPath": "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/root/.nuget/NuGet/NuGet.Config"
