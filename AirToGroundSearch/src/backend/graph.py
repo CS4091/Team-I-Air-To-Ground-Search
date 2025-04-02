@@ -24,9 +24,9 @@ class TwoDimGraph:
             for i in range(m * n):
                 if i > 0:
                     self.adj_matrix.add_edge(i, i - 1)
-                if i < m * n:
+                if i < m * n - 1:
                     self.adj_matrix.add_edge(i, i + 1)
-                if i + n < m * n:
+                if i + n < m * n - 1:
                     self.adj_matrix.add_edge(i, i + n)
                 if i - n > 0:
                     self.adj_matrix.add_edge(i, i - n)
