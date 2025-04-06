@@ -8,8 +8,9 @@ def display_grid(grid, name):
     cmap = mcolors.ListedColormap(["black", "white", "red", "green", "purple"])
     bounds = [0, 1, 2, 3, 4]
     norm = mcolors.BoundaryNorm(bounds, cmap.N)
+    plt.imshow(grid, cmap=cmap, norm=norm)
     plt.axis("off")
-    plt.savefig("/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/" + name)
+    plt.savefig("./wwwroot/outputs/GeneratedGrid/" + name)
 
 if __name__ == "__main__":
     filepath = sys.argv[1]
