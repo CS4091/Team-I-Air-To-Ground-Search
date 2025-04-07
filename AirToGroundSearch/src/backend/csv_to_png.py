@@ -5,7 +5,7 @@ import matplotlib.colors as mcolors
 import sys
 
 def display_grid(grid, name):
-    cmap = mcolors.ListedColormap(["black", "white", "red", "green", "purple"])
+    cmap = mcolors.ListedColormap(["black", "white", "red", "green"])
     bounds = [0, 1, 2, 3, 4]
     norm = mcolors.BoundaryNorm(bounds, cmap.N)
     plt.imshow(grid, cmap=cmap, norm=norm)
