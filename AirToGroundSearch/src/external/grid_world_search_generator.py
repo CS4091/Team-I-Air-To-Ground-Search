@@ -44,7 +44,7 @@ def generate_grid(
 
 def display_grid(grid, start_coords):
     cmap = mcolors.ListedColormap(["black", "white", "red", "green", "purple"])
-    bounds = [0, 1, 2, 3, 4]
+    bounds = [0, 1, 2, 3, 4, 5]
     norm = mcolors.BoundaryNorm(bounds, cmap.N)
 
     grid[start_coords[0], start_coords[1]] = 4
