@@ -10,9 +10,11 @@ import math
 def h(start_set, curr_set):
     pass
 
+# Locaton Identifier
+Location = Tuple[int, int, int, int]
 
 def a_star_search(
-    grid: pd.DataFrame,
+    grid: TwoDimGraph,
     start_index: Tuple[int, int],
     radar_range: Tuple[int, int],
     fuel_range: int,
@@ -26,11 +28,11 @@ def a_star_search(
     if direction > 1:
         range_row, range_col = range_col, range_row
 
-    open_set: list[Tuple[int, int, int]] = [] 
+    open_set: list[Location] = [] 
     heapify(open_set)
     heappush(open_set, (start_row, start_col, direction, fuel_used))
 
-    came_from: list[Tuple[int, int, int]] = []
+    came_from: dict[Location] = {}
 
     g_score = defaultdict(lambda: math.inf)
     g_score[start_index] = 0
