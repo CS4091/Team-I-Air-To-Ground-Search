@@ -1,13 +1,11 @@
 import numpy as np
 from enum import Enum
 
-
 class Direction(Enum):
     UP = 1
     DOWN = 2
     LEFT = 3
     RIGHT = 4
-
 
 class Drone:
     def __init__(self, grid, start_row, start_col):
@@ -17,30 +15,18 @@ class Drone:
         self.direction = Direction.UP  # Initial direction
 
     def move_straight(self):
-        if (
-            self.direction == Direction.UP
-            and self.row > 0
-            and self.grid[self.row - 1, self.col] == 0
-        ):
-            self.row -= 1
-        elif (
-            self.direction == Direction.DOWN
-            and self.row < self.grid.shape[0] - 1
-            and self.grid[self.row + 1, self.col] == 0
-        ):
-            self.row += 1
-        elif (
-            self.direction == Direction.LEFT
-            and self.col > 0
-            and self.grid[self.row, self.col - 1] == 0
-        ):
-            self.col -= 1
-        elif (
-            self.direction == Direction.RIGHT
-            and self.col < self.grid.shape[1] - 1
-            and self.grid[self.row, self.col + 1] == 0
-        ):
-            self.col += 1
+        if self.direction == Direction.UP:
+            if self.row > 0 and self.grid[self.row - 1, self.col] == 0:
+                self.row -= 1
+        elif self.direction == Direction.DOWN:
+            if self.row < self.grid.shape[0] - 1 and self.grid[self.row + 1, self.col] == 0:
+                self.row += 1
+        elif self.direction == Direction.LEFT:
+            if self.col > 0 and self.grid[self.row, self.col - 1] == 0:
+                self.col -= 1
+        elif self.direction == Direction.RIGHT:
+            if self.col < self.grid.shape[1] - 1 and self.grid[self.row, self.col + 1] == 0:
+                self.col += 1
 
     def turn_left(self):
         if self.direction == Direction.UP:
@@ -66,8 +52,6 @@ class Drone:
 
     def get_position(self):
         return self.row, self.col
-
-
 
 def read_grid_from_csv(filepath):
     return np.loadtxt(filepath, delimiter=",", dtype=int)
@@ -101,7 +85,7 @@ def update_scanned_grid(drone, scanned_grid):
 
 def calculate_coverage(scanned_grid, grid):
     navigable_tiles = np.sum(grid == 0)
-    scanned_tiles = np.sum((scanned_grid == 1) & (grid == 0))
+    scanned_tiles = np.sum((scanned_grid == 2) & (grid == 0))
     return (scanned_tiles / navigable_tiles) * 100
 
 def find_start_coordinate(grid):
