@@ -78,7 +78,7 @@ def find_start_coordinate(grid: np.ndarray):
 
         # Check if the coordinate is clear of obstacles
         random_cell = grid[row_index, col_index]
-        if random_cell == 1:
+        if random_cell == 0:
             break
 
     return row_index, col_index
