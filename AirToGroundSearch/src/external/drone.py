@@ -51,7 +51,7 @@ class Drone:
             self.direction = Direction.DOWN
         elif self.direction == Direction.RIGHT:
             self.direction = Direction.UP
-        self.move_straight()
+        #self.move_straight()
 
     def turn_right(self):
         if self.direction == Direction.UP:
@@ -62,7 +62,7 @@ class Drone:
             self.direction = Direction.UP
         elif self.direction == Direction.RIGHT:
             self.direction = Direction.DOWN
-        self.move_straight()
+        #self.move_straight()
 
     def get_position(self):
         return self.row, self.col
@@ -95,8 +95,9 @@ def update_scanned_grid(drone, scanned_grid):
         ]
 
     for r, c in view:
-        if 0 <= r < scanned_grid.shape[0] and 0 <= c < scanned_grid.shape[1]:
-            scanned_grid[r, c] = 1
+        if 0 <= r < scanned_grid.shape[0] and 0 <= c < scanned_grid.shape[1] and scanned_grid[r, c] != 1:
+            scanned_grid[r, c] = 2
+        
 
 def calculate_coverage(scanned_grid, grid):
     navigable_tiles = np.sum(grid == 0)
