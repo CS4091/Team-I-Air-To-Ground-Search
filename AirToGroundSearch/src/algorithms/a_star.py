@@ -1,5 +1,4 @@
-# import pandas as pd
-from ..backend.graph import TwoDimGraph
+import pandas as pd
 import numpy as np
 from heapq import heapify, heappush, heappop
 from typing import Tuple
@@ -26,7 +25,7 @@ def a_star_search(
     if direction > 1:
         range_row, range_col = range_col, range_row
 
-    open_set: list[Tuple[int, int, int]] = [] 
+    open_set: list[Tuple[int, int, int]] = []
     heapify(open_set)
     heappush(open_set, (start_row, start_col, direction, fuel_used))
 

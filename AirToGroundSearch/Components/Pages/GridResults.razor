@@ -4,39 +4,52 @@
 <PageTitle>Air-to-Ground Pathing Results</PageTitle>
 
 <h1>Air-to-Ground Pathing Results</h1>
+<div class="row">
+        @if (resultsGenerated)
+        {
+            <div class="col-md-6">
+                <h3>Grid Path</h3>
+                <img src="./outputs/GridResults/results.png" alt="Grid World" style="max-width: 480px; max-height: 640px;" />
+                <div class="btn-group" role="group">
+                    <a class="btn btn-secondary" href="@imageSource" download="results.png">Download Results PNG</a>
+                    <a class="btn btn-secondary" href="@textSource" download="results.txt">Download Results TXT</a>
+                    @*Add other downloads as needed*@
+                </div>
+            </div>
 
-@if (resultsGenerated)
-{
-    <div class="col-md-6">
-        <h3>Pathing Results</h3>
-        <p>
-            <img src="./outputs/GridResults/results.png" alt="Grid World" />
-        </p>
-        <div class="btn-group" role="group">
-            <a class="btn btn-secondary" href="@imageSource" download="results.png">Download Results PNG</a>
-            @*Add other downloads as needed*@
+        }
+    @if (resultsGenerated)
+    {
+        <div class="col-md-6">
+            <h3>Pathing Results</h3>
+            @foreach (var line in File.ReadLines("./wwwroot/outputs/GridResults/results.txt"))
+            {
+                <p>@line</p>
+            }
         </div>
-    </div>
 
-}
-else
-{
-    <h6>No results generated yet. Please run the algorithm first.</h6>
-    <a href="runalgorithm">
-        <button class="btn btn-primary" >Run Algorithm</button>
-    </a>
-}
+    }
+    else
+    {
+        <h6>No results generated yet. Please run the algorithm first.</h6>
+        <a href="runalgorithm">
+            <button class="btn btn-primary" >Run Algorithm</button>
+        </a>
+    }
+</div>
 
 
 @code {
     private bool resultsGenerated = false;
     private string? imageSource = "";
+    private string? textSource = "";
 
     protected override Task OnInitializedAsync()
     {
         if(File.Exists("./wwwroot/outputs/GridResults/results.png")){
             resultsGenerated = true;
             imageSource = $"outputs/GridResults/results.png";
+            textSource = $"outputs/GridResults/results.txt";
             // Add other files if needed
         }
         return Task.CompletedTask;

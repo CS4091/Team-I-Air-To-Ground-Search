@@ -45,6 +45,14 @@
       "PackagePath": "staticwebassets/outputs/GridResults/.gitignore"
     },
     {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results.png",
+      "PackagePath": "staticwebassets/outputs/GridResults/results.png"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results.txt",
+      "PackagePath": "staticwebassets/outputs/GridResults/results.txt"
+    },
+    {
       "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/.gitignore",
       "PackagePath": "staticwebassets/outputs/ImportedGrid/.gitignore"
     },

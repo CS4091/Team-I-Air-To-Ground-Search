@@ -15,85 +15,77 @@
     <p></p>
 }
 
-
-@if(gridWasGenerated || ImportedGrid)
-{
+<div class="row">
+    @* Left Column *@
     <div class="col-md-6">
-        <div class="d-flex justify-content-between align-items-center">
-            <h3>Current Grid</h3>
+        @if(gridWasGenerated || ImportedGrid)
+        {
+            <div class="d-flex justify-content-between align-items-center">
+                <h3>Current Grid</h3>
+            </div>
+            <p>
+                <img src="@imageSource" alt="Grid World" />
+            </p>
             <button class="btn btn-primary" @onclick="deleteImportedGrid">Clear Grid</button>
-        </div>
-        <p>
-            <img src="@imageSource" alt="Grid World" />
-        </p>
+        }
     </div>
-}
 
-<div class="col-md-6">
-    <h4>Import a new grid?</h4>
-    <p>Upload a new Grid to run the pathing algorithm on.</p>
-    @if (!clearFileInputs)
-    {
-        <div class="row">
-            <div class="col-md-6 form-group">
-                <p>Upload CSV:</p>
-                <InputFile OnChange="UploadGrid" accept=".csv" />
-                <p></p>
+    @* Right Column *@
+    <div class="col-md-6">
+        <h4>Import a new grid?</h4>
+        <p>Upload a new Grid to run the pathing algorithm on.</p>
+        @if (!clearFileInputs)
+        {
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <p>Upload CSV:</p>
+                    <InputFile OnChange="UploadGrid" accept=".csv" />
+                    <p></p>
+                </div>
+                <div class="col-md-6 form-group">
+                    <p>Upload JSON:</p>
+                    <InputFile OnChange="UploadGrid" accept=".json" />
+                    <p></p>
+                </div>
+                <div class="col-md-6 form-group">
+                    <p>Upload PNG:</p>
+                    <InputFile OnChange="UploadGrid" accept=".png" />
+                    <p></p>
+                </div>
+                <div class="col-md-6 form-group">
+                    <p>Upload TXT:</p>
+                    <InputFile OnChange="UploadGrid" accept=".txt" />
+                    <p></p>
+                </div>
             </div>
-            <div class="col-md-6 form-group">
-                <p>Upload JSON:</p>
-                <InputFile OnChange="UploadGrid" accept=".json" />
-                <p></p>
+        }
+
+        @if (ImportedGrid)
+        {
+            <p>Grid imported successfully!</p>
+        }
+
+        @if(gridWasGenerated || ImportedGrid)
+        {
+            <label for="algorithm">Select an algorithm:</label>
+            <p></p>
+
+            <div class="row" style="max-width: 800px;">
+                <div class="col-md-4 form-group">
+                    <select class="form-control" id="algorithm" @bind="algorithm">
+                        <option value="a_star">A*</option>
+                        <option value="dijkstra">Dijkstra</option>
+                    </select>
+                </div>
+                <div class="col-md-3 form-group">
+                    <button class="btn btn-primary" @onclick="runPythonScript">Run Algorithm</button>
+                </div>
             </div>
-            <div class="col-md-6 form-group">
-                <p>Upload PNG:</p>
-                <InputFile OnChange="UploadGrid" accept=".png" />
-                <p></p>
-            </div>
-            <div class="col-md-6 form-group">
-                <p>Upload TXT:</p>
-                <InputFile OnChange="UploadGrid" accept=".txt" />
-                <p></p>
-            </div>
-        </div>
-    }
+        }
+    </div>
 </div>
 
-
-@if (ImportedGrid)
-{
-    <p>Grid imported successfully!</p>
-}
-
-@if(gridWasGenerated||ImportedGrid)
-{
-    <label for="algorithm">Select an algorithm:</label>
-    <p></p>
-
-    <div class="row" style="max-width: 800px;">
-        <div class="col-md-4 form-group">
-            <select class="form-control" id="algorithm" @bind="algorithm">
-                <option value="a_star">A*</option>
-                <option value="dijkstra">Dijkstra</option>
-            </select>
-        </div>
-        <div class="col-md-3 form-group">
-            <button class="btn btn-primary" @onclick="runPythonScript">Run Algorithm</button>
-        </div>
-    </div>
-
-    <p></p>
-    <p role="status">Output:</p>
-    @if (gridResultLines != null)
-    {
-        <ul>
-            @foreach (var line in gridResultLines)
-            {
-                <li>@line</li>
-            }
-        </ul>
-    }
-}
+@inject NavigationManager NavigationManager
 
 @code {
     private List<string> gridResultLines = new List<string>();
@@ -229,7 +221,11 @@
                 using (var reader = process.StandardOutput)
                 {
                     string result = reader.ReadToEnd();
-                    gridResultLines = result.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    // Output the result to a file
+                    string outputFilePath = "./wwwroot/outputs/GridResults/results.txt";
+                    File.WriteAllText(outputFilePath, result);
+                    // Redirect the user to the GridResults page
+                    NavigationManager.NavigateTo("/GridResults");
                 }
             }
         }

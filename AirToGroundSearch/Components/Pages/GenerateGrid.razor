@@ -9,43 +9,53 @@
     This page generates a grid world for the air-to-ground search problem.
 </p>
 
-@if(gridWasGenerated)
-{
-    <p>
-    <img src="@imageSource" alt="Grid World" />
-    </p>
-}
 
-<div class="btn-group" role="group">
-    <button class="btn btn-primary" @onclick="runPythonScript">Generate Grid</button>
-    @if (gridWasGenerated)
-    {
-        <a class="btn btn-secondary" href="@imageSource" download="grid_world.png">Download Grid PNG</a>
-        <a class="btn btn-secondary" href="@csvSource" download="grid_world.csv">Download Grid CSV</a>
-        <a class="btn btn-secondary" href="@jsonSource" download="grid_world_params.json">Download Grid JSON</a>
-        <a class="btn btn-secondary" href="@txtSource" download="grid_world.txt">Download Grid TXT</a>
-    }
-</div>
-
-<p></p>
-@if (File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.txt"))
-{
-    <p role="status">Output:</p>
-    <ul>
-        @if (gridResultLines != null)
+<div class="row">
+    @* Left Column *@
+    <div class="col-md-6">
+        @if(gridWasGenerated)
         {
-            @foreach (var line in gridResultLines)
-            {
-                <li>@line</li>
-            }
+            <div class="d-flex justify-content-between align-items-center">
+                <h3>Current Grid</h3>
+            </div>
+                <img src="@imageSource" alt="Grid World" />
+                @if (gridWasGenerated)
+                    {
+                        <button class="btn btn-primary" @onclick="deleteGeneratedGrid">Clear Grid</button>
+                    }
         }
-    </ul>
-}
+    </div>
 
-@if (gridWasGenerated)
-{
-    <button class="btn btn-primary" @onclick="deleteGeneratedGrid">Clear Grid</button>
-}
+    @* Right Column *@
+    <div class="col-md-6">
+        <h3>Generate a new grid?</h3>
+        <p>Click the button below to generate a new grid.</p>
+        <div class="btn-group" role="group">
+            <button class="btn btn-primary" @onclick="runPythonScript">Generate Grid</button>
+            @if (gridWasGenerated)
+            {
+                <a class="btn btn-secondary" href="@imageSource" download="grid_world.png">Download Grid PNG</a>
+                <a class="btn btn-secondary" href="@csvSource" download="grid_world.csv">Download Grid CSV</a>
+                <a class="btn btn-secondary" href="@jsonSource" download="grid_world_params.json">Download Grid JSON</a>
+                <a class="btn btn-secondary" href="@txtSource" download="grid_world.txt">Download Grid TXT</a>
+            }
+        </div>
+        <p></p>
+        @if (File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.txt"))
+        {
+            <p role="status">Output:</p>
+            <ul>
+                @if (gridResultLines != null)
+                {
+                    @foreach (var line in gridResultLines)
+                    {
+                        <li>@line</li>
+                    }
+                }
+            </ul>
+        }
+    </div>
+</div>
 
 @code {
     private List<string>? gridResultLines;
