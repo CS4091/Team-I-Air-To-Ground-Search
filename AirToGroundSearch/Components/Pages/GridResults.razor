@@ -1,0 +1,44 @@
+@page "/GridResults"
+@using System.Diagnostics
+
+<PageTitle>Air-to-Ground Pathing Results</PageTitle>
+
+<h1>Air-to-Ground Pathing Results</h1>
+
+@if (resultsGenerated)
+{
+    <div class="col-md-6">
+        <h3>Pathing Results</h3>
+        <p>
+            <img src="./outputs/GridResults/results.png" alt="Grid World" />
+        </p>
+        <div class="btn-group" role="group">
+            <a class="btn btn-secondary" href="@imageSource" download="results.png">Download Results PNG</a>
+            @*Add other downloads as needed*@
+        </div>
+    </div>
+
+}
+else
+{
+    <h6>No results generated yet. Please run the algorithm first.</h6>
+    <a href="runalgorithm">
+        <button class="btn btn-primary" >Run Algorithm</button>
+    </a>
+}
+
+
+@code {
+    private bool resultsGenerated = false;
+    private string? imageSource = "";
+
+    protected override Task OnInitializedAsync()
+    {
+        if(File.Exists("./wwwroot/outputs/GridResults/results.png")){
+            resultsGenerated = true;
+            imageSource = $"outputs/GridResults/results.png";
+            // Add other files if needed
+        }
+        return Task.CompletedTask;
+    }
+}
