@@ -36,14 +36,14 @@ def generate_grid(
             normalized_value = (noise_value + 1) / 2
 
             if normalized_value > threshold:
-                grid[y, x] = 1  # Obstacle
+                grid[y, x] = 0  # Clear Space
             else:
-                grid[y, x] = 0  # Clear space
+                grid[y, x] = 1  # Obstacle
 
     return grid
 
 def display_grid(grid, start_coords):
-    cmap = mcolors.ListedColormap(["black", "white", "red", "green", "purple"])
+    cmap = mcolors.ListedColormap(["white", "black", "red", "green", "purple"])
     bounds = [0, 1, 2, 3, 4, 5]
     norm = mcolors.BoundaryNorm(bounds, cmap.N)
 
