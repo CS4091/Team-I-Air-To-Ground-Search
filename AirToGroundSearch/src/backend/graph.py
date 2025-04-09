@@ -22,9 +22,9 @@ class TwoDimGraph:
             self.vertices = np.array(vertices)
 
             for i in range(m * n):
-                if i > 0:
+                if i % n > 0:
                     self.adj_matrix.add_edge(i, i - 1)
-                if i < m * n - 1:
+                if i % n < n - 1:
                     self.adj_matrix.add_edge(i, i + 1)
                 if i + n < m * n - 1:
                     self.adj_matrix.add_edge(i, i + n)
@@ -38,6 +38,12 @@ class TwoDimGraph:
                 f"Length of vertices ({len(vertices)}) doesn't match stated dimensions ({m}*{n})"
             )
 
+    def grid_size(self):
+        return self.m * self.n
+    
+    def shape(self):
+        return (self.m, self.n)
+
     def get_flat_pos(self, i, j):
         return (self.m * i) + j
 
@@ -46,6 +52,9 @@ class TwoDimGraph:
 
     def get_vertex(self, i, j):
         return self.vertices[self.get_flat_pos(i, j)]
+    
+    def is_val(self, i, j, val):
+        return self.get_vertex(i, j) == val
 
     def get_neighbors(self, i, j):
         pos = self.get_flat_pos(i, j)

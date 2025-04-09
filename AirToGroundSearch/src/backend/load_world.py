@@ -2,8 +2,8 @@ import pathlib
 import json
 from typing import Tuple
 import numpy as np
-from graph import TwoDimGraph
-
+from backend.graph import TwoDimGraph
+from algorithms.a_star import a_star_search
 
 class GridWorld:
     def __init__(self, filepath: pathlib.Path):
@@ -24,14 +24,26 @@ class GridWorld:
 
     @staticmethod
     def load_world(dirpath: pathlib.Path) -> Tuple[np.ndarray, dict]:
-        world: np.ndarray = np.genfromtxt(dirpath / "grid_world.csv", delimiter=',')
+        world: np.ndarray = np.genfromtxt(dirpath / "grid_world.csv", delimiter=",")
         f = open(dirpath / "grid_world_params.json")
         world_params: dict = json.load(f)
         f.close()
 
         return world, world_params
 
+    def run_search(self, search_type="astar"):
+        if search_type == "astar":
+            return a_star_search(
+                self.world_grid,
+                (self.starting_row, self.starting_col),
+                (self.forward_range, self.lateral_width),
+                self.num_moves,
+            )
+
 
 if __name__ == "__main__":
-    world = GridWorld(pathlib.Path("AirToGroundSearch/wwwroot/outputs/GeneratedGrid").resolve())
+    world = GridWorld(
+        pathlib.Path("../wwwroot/outputs/GeneratedGrid").resolve()
+    )
     print(world.world_params)
+    print(world.run_search())
