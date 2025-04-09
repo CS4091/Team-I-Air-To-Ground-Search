@@ -1,5 +1,5 @@
-from backend.graph import TwoDimGraph
-from backend.csv_to_png import display_grid
+from ..backend.graph import TwoDimGraph
+from ..backend.csv_to_png import display_grid
 import numpy as np
 from heapq import heapify, heappush, heappop
 from typing import Tuple, Literal
@@ -150,7 +150,7 @@ def a_star_search(
     radar_range: Tuple[int, int],
     fuel_range: int,
     direction: Literal["N", "S", "E", "W"] = "N",  # N, S, E, W
-    goal_condition: int = 20,
+    goal_condition: int = 10,
 ):
     start_row, start_col = start_index
     range_row, range_col = radar_range
@@ -192,6 +192,7 @@ def a_star_search(
 
         # Check if cell meets goal condition
         if current.reached_goal(explored[current], goal_condition):
+            print(f"coverage: {(goal_condition / grid.grid_size()) * 100}")
             return backtrace_path(grid, current, came_from, explored[current])
 
         if current.g_score + 1 >= fuel_range:

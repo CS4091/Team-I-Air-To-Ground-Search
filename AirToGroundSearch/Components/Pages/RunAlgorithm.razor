@@ -73,8 +73,8 @@
             <div class="row" style="max-width: 800px;">
                 <div class="col-md-4 form-group">
                     <select class="form-control" id="algorithm" @bind="algorithm">
-                        <option value="a_star">A*</option>
-                        <option value="d_search">Dijkstra</option>
+                        <option value="backend.load_world">A*</option>
+                        <option value="algorithms.d_search">Dijkstra</option>
                     </select>
                 </div>
                 <div class="col-md-3 form-group">
@@ -240,7 +240,7 @@
         var psi = new ProcessStartInfo
         {
             FileName = "python",
-            Arguments = $"-m AirToGroundSearch.src.algorithms.{algorithm}",
+            Arguments = $"-m AirToGroundSearch.src.{algorithm}",
             RedirectStandardOutput = true,
             UseShellExecute = false,
             CreateNoWindow = true,
@@ -256,7 +256,7 @@
                 using (var reader = process.StandardOutput)
                 {
                     string result = await reader.ReadToEndAsync();
-                    string outputFilePath = algorithm == "a_star"
+                    string outputFilePath = algorithm == "backend.load_world"
                         ? "./wwwroot/outputs/GridResults/results_a.txt"
                         : "./wwwroot/outputs/GridResults/results_d.txt";
                     File.WriteAllText(outputFilePath, result);

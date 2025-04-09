@@ -2,8 +2,8 @@ import pathlib
 import json
 from typing import Tuple
 import numpy as np
-from backend.graph import TwoDimGraph
-from algorithms.a_star import a_star_search
+from .graph import TwoDimGraph
+from ..algorithms.a_star import a_star_search
 
 class GridWorld:
     def __init__(self, filepath: pathlib.Path):
@@ -42,8 +42,9 @@ class GridWorld:
 
 
 if __name__ == "__main__":
+    parent = pathlib.Path(__file__).parent.parent.parent
     world = GridWorld(
-        pathlib.Path("../wwwroot/outputs/GeneratedGrid").resolve()
+        pathlib.Path(parent / "wwwroot/outputs/GeneratedGrid").resolve()
     )
     print(world.world_params)
     print(world.run_search())
