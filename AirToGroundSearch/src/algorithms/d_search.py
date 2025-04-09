@@ -43,8 +43,8 @@ def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: 
             continue
 
         visited[current_row, current_col] = True
-        previous_row = drone.row
-        previous_col = drone.col
+        #previous_row = drone.row
+        #previous_col = drone.col
         drone.row, drone.col = current_row, current_col
         drone.direction = current_direction
         update_scanned_grid(drone, scanned_grid)
@@ -90,7 +90,7 @@ def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: 
 
             drone.row, drone.col = original_row, original_col
             drone.direction = original_direction
-            scanned_grid[previous_row, previous_col] = 2
+            #scanned_grid[previous_row, previous_col] = 2
             scanned_grid[drone.row, drone.col] = 3
 
         # print(previous_row, previous_col)
@@ -123,7 +123,7 @@ if __name__ == "__main__":
             )
         )
     start = (0, 0)
-    fuel = 10
+    fuel = 900
     scanned_grid = grid.copy()
     scanned_grid = dijkstra_scan(
         grid, fuel, scanned_grid, Drone(grid, start_row, start_col)
