@@ -1,16 +1,1 @@
 .vscode
-AirToGroundSearch/bin/Debug/net8.0/AirToGroundSearch.dll
-AirToGroundSearch/bin/Debug/net8.0/AirToGroundSearch.pdb
-AirToGroundSearch/bin/Debug/net8.0/AirToGroundSearch.staticwebassets.runtime.json
-AirToGroundSearch/obj/Debug/net8.0/AirToGroundSearch.AssemblyInfo.cs
-AirToGroundSearch/obj/Debug/net8.0/AirToGroundSearch.AssemblyInfoInputs.cache
-AirToGroundSearch/obj/Debug/net8.0/AirToGroundSearch.dll
-AirToGroundSearch/obj/Debug/net8.0/AirToGroundSearch.pdb
-AirToGroundSearch/obj/Debug/net8.0/AirToGroundSearch.sourcelink.json
-AirToGroundSearch/obj/Debug/net8.0/ref/AirToGroundSearch.dll
-AirToGroundSearch/obj/Debug/net8.0/refint/AirToGroundSearch.dll
-AirToGroundSearch/obj/Debug/net8.0/staticwebassets.build.json
-AirToGroundSearch/obj/Debug/net8.0/staticwebassets.development.json
-AirToGroundSearch/obj/Debug/net8.0/staticwebassets.pack.json
-AirToGroundSearch/obj/Debug/net8.0/staticwebassets/msbuild.AirToGroundSearch.Microsoft.AspNetCore.StaticWebAssets.props
-AirToGroundSearch/src/algorithms/__pycache__/d_search.cpython-310.pyc
