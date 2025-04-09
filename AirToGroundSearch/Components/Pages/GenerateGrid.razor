@@ -30,6 +30,12 @@
     <div class="col-md-6">
         <h3>Generate a new grid?</h3>
         <p>Click the button below to generate a new grid.</p>
+        <p>Enter the number of rows and columns for the grid world. The default is 100x100.</p>
+
+        <p style="margin-bottom: .2rem">Rows:</p>
+        <input type="text" class="form-control" placeholder="" @bind="gridRows" />
+        <p style="margin-bottom: .2rem">Columns:</p>
+        <input type="text" class="form-control" style="margin-bottom: 1rem" placeholder="Enter grid columns (e.g., 100)" @bind="gridCols" />
         <div class="btn-group" role="group">
             <button class="btn btn-primary" @onclick="runPythonScript">Generate Grid</button>
             @if (gridWasGenerated)
@@ -64,6 +70,8 @@
     private string? jsonSource = $"outputs/GeneratedGrid/grid_world_params.json?{Guid.NewGuid()}";
     private string? txtSource = $"outputs/GeneratedGrid/grid_world.txt?{Guid.NewGuid()}";
     private bool gridWasGenerated = File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.png");
+    private int gridRows = 100;
+    private int gridCols = 100;
 
     protected override Task OnInitializedAsync()
     {
@@ -79,7 +87,7 @@
         var psi = new ProcessStartInfo
         {
             FileName = "python",
-            Arguments = "src/external/grid_world_search_generator.py",
+            Arguments = "src/external/grid_world_search_generator.py " + gridRows + " " + gridCols,
             RedirectStandardOutput = false, // No need to redirect standard output
             UseShellExecute = false,
             CreateNoWindow = true

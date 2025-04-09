@@ -42,6 +42,7 @@ def generate_grid(
 
     return grid
 
+
 def display_grid(grid, start_coords):
     cmap = mcolors.ListedColormap(["white", "black", "red", "green", "purple"])
     bounds = [0, 1, 2, 3, 4, 5]
@@ -123,8 +124,9 @@ def write_problem_params(
 
 
 if __name__ == "__main__":
-    width = sys.argv[1]  # Width of the grid
-    height = sys.argv[2]  # Height of the grid
+    # Convert command-line arguments to integers
+    height = int(sys.argv[1])  # Convert first argument to integer
+    width = int(sys.argv[2])  # Convert second argument to integer
 
     # random.seed(42)
 
