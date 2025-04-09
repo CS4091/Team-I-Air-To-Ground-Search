@@ -85,7 +85,7 @@ def update_scanned_grid(drone, scanned_grid):
 
 def calculate_coverage(scanned_grid, grid):
     navigable_tiles = np.sum(grid == 0)
-    scanned_tiles = np.sum((scanned_grid == 2) & (grid == 0))
+    scanned_tiles = np.sum((scanned_grid == 2) & (grid == 0)) + np.sum((scanned_grid == 3) & (grid == 0))
     return (scanned_tiles / navigable_tiles) * 100
 
 def find_start_coordinate(grid):
