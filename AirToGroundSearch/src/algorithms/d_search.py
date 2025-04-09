@@ -33,7 +33,8 @@ def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: 
     costs[start] = 0
     moves = 0
 
-    while queue and moves < fuel:
+    #while queue and moves < fuel:
+    while calculate_coverage(scanned_grid, grid) <= 80:
         current_cost, (current_row, current_col), current_direction = heapq.heappop(
             queue
         )
