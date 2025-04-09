@@ -87,17 +87,24 @@ def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: 
 
 
 if __name__ == "__main__":
-    grid_filepath = pathlib.Path("AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.csv")
-    grid = read_grid_from_csv(grid_filepath)
+    generated_grid_filepath = pathlib.Path("AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.csv")
+    imported_grid_filepath = pathlib.Path("AirToGroundSearch/wwwroot/outputs/ImportedGrid/grid_world.csv")
+
+    try:
+        grid = read_grid_from_csv(imported_grid_filepath)
+        start_row, start_col = read_json(pathlib.Path("AirToGroundSearch/wwwroot/outputs/ImportedGrid/grid_world_params.json"))
+    except FileNotFoundError:
+        grid = read_grid_from_csv(generated_grid_filepath)
+        start_row, start_col = read_json(pathlib.Path("AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world_params.json"))
     start = (0, 0)
     fuel = 10
     scanned_grid = grid.copy()
-    start_row, start_col = read_json(pathlib.Path("AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world_params.json"))
     scanned_grid = dijkstra_scan(grid, fuel, scanned_grid, Drone(grid, start_row, start_col))
     print("Final scanned grid:")
     print(scanned_grid)
     print(f"Coverage: {calculate_coverage(scanned_grid, grid):.2f}%")
-    np.savetxt("/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/scanned_grid.csv", scanned_grid, delimiter=",", fmt="%d")
-    display_grid("/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/scanned_grid.csv", "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/d_search.png")
+    np.savetxt("/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_d.txt", scanned_grid, delimiter=",", fmt="%d")
+    display_grid("/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_d.csv", "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_d.png")
 
 #TODO detect obstacles and avoid, improve logic behind path selection (Chosing the path with the most land to scan), prevent diagonal movement, make drone.py detect walls
+#To run code be in /workspaces/Team-I-Ground-to-air-Search# python -m AirToGroundSearch.src.algorithms.d_search
