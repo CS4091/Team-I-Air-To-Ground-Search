@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "z2SjBOH+7S9561vc7bOXmQlgpKVOf1AWSr00Q2cDSwQ=",
+  "Hash": "irPiHMwfOsNlmf9TTpiU+ymj1Tr/GUK8VGv/ss4h+bA=",
   "Source": "AirToGroundSearch",
   "BasePath": "_content/AirToGroundSearch",
   "Mode": "Default",
@@ -245,12 +245,12 @@
       "OriginalItemSpec": "wwwroot/outputs/GridResults/.gitignore"
     },
     {
-      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results.png",
+      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_d.csv",
       "SourceId": "AirToGroundSearch",
       "SourceType": "Discovered",
       "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
       "BasePath": "_content/AirToGroundSearch",
-      "RelativePath": "outputs/GridResults/results.png",
+      "RelativePath": "outputs/GridResults/results_d.csv",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -261,15 +261,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/outputs/GridResults/results.png"
+      "OriginalItemSpec": "wwwroot/outputs/GridResults/results_d.csv"
     },
     {
-      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results.txt",
+      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_d.png",
       "SourceId": "AirToGroundSearch",
       "SourceType": "Discovered",
       "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
       "BasePath": "_content/AirToGroundSearch",
-      "RelativePath": "outputs/GridResults/results.txt",
+      "RelativePath": "outputs/GridResults/results_d.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -280,7 +280,26 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/outputs/GridResults/results.txt"
+      "OriginalItemSpec": "wwwroot/outputs/GridResults/results_d.png"
+    },
+    {
+      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_d.txt",
+      "SourceId": "AirToGroundSearch",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
+      "BasePath": "_content/AirToGroundSearch",
+      "RelativePath": "outputs/GridResults/results_d.txt",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/outputs/GridResults/results_d.txt"
     },
     {
       "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/.gitignore",

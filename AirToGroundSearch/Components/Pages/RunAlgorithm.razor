@@ -6,7 +6,7 @@
 
 <h1>Air-to-Ground Pathing Algorithm Runner</h1>
 <p>
-    This page runs the pathing algorithm for the air-to-ground search problem.
+    This page runs the pathing algorithm for the air-to-ground search problem. NOTE: Importing a grid deletes any previously generated grid.
 </p>
 
 @if (ImportedGrid is false && !gridWasGenerated)
@@ -74,7 +74,7 @@
                 <div class="col-md-4 form-group">
                     <select class="form-control" id="algorithm" @bind="algorithm">
                         <option value="a_star">A*</option>
-                        <option value="dijkstra">Dijkstra</option>
+                        <option value="d_search">Dijkstra</option>
                     </select>
                 </div>
                 <div class="col-md-3 form-group">
@@ -167,7 +167,24 @@
             }
         }
         // Save the file
-        var filePath = $"./wwwroot/outputs/ImportedGrid/{fileName}";
+        var newFileName = Path.GetExtension(file.Name);
+        if (fileName.Contains(".png"))
+        {
+            newFileName = "grid_world.png";
+        }
+        else if (fileName.Contains(".json"))
+        {
+            newFileName = "grid_world_params.json";
+        }
+        else if (fileName.Contains(".csv"))
+        {
+            newFileName = "grid_world.csv";
+        }
+        else if (fileName.Contains(".txt"))
+        {
+            newFileName = "grid_world.txt";
+        }
+        var filePath = $"./wwwroot/outputs/ImportedGrid/{newFileName}";
         await using (var fileStream = file.OpenReadStream())
         await using (var outputStream = File.Create(filePath))
         {
@@ -176,7 +193,7 @@
         if (fileName.Contains(".png"))
         {
             importedPNG = true;
-            imageSource = $"outputs/ImportedGrid/{fileName}?{Guid.NewGuid()}";
+            imageSource = $"outputs/ImportedGrid/{newFileName}?{Guid.NewGuid()}";
         }
         if (fileName.Contains(".json"))
         {
@@ -200,16 +217,17 @@
         }
     }
 
-    private void runPythonScript()
+    private async Task runPythonScript()
     {
         // Create a new process
         var psi = new ProcessStartInfo
         {
             FileName = "python",
-            Arguments = $"src/algorithms/{algorithm}.py",
+            Arguments = $"-m AirToGroundSearch.src.algorithms.{algorithm}", // Use -m to run as a module
             RedirectStandardOutput = true,
             UseShellExecute = false,
-            CreateNoWindow = true
+            CreateNoWindow = true,
+            WorkingDirectory = "/workspaces/Team-I-Air-To-Ground-Search" // Set the working directory to the project root
         };
 
         // Start the process
@@ -217,16 +235,29 @@
         {
             if (process != null)
             {
+                // Wait for the process to complete
+                await process.WaitForExitAsync();
+
                 // Read the output
                 using (var reader = process.StandardOutput)
                 {
-                    string result = reader.ReadToEnd();
+                    string result = await reader.ReadToEndAsync();
                     // Output the result to a file
-                    string outputFilePath = "./wwwroot/outputs/GridResults/results.txt";
+                    string outputFilePath = string.Empty;
+                    if (algorithm == "a_star")
+                    {
+                        outputFilePath = "./wwwroot/outputs/GridResults/results_a.txt";
+                    }
+                    else if (algorithm == "d_search")
+                    {
+                        outputFilePath = "./wwwroot/outputs/GridResults/results_d.txt";
+                    }
                     File.WriteAllText(outputFilePath, result);
-                    // Redirect the user to the GridResults page
-                    NavigationManager.NavigateTo("/GridResults");
                 }
+
+                // Add a cache-busting query parameter to the image URL
+                var timestamp = DateTime.Now.Ticks;
+                NavigationManager.NavigateTo($"/GridResults?cacheBust={timestamp}");
             }
         }
     }
