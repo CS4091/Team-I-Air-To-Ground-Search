@@ -31,13 +31,14 @@
         <h3>Generate a new grid?</h3>
         <p>Click the button below to generate a new grid.</p>
         <p>Enter the number of rows and columns for the grid world. The default is 100x100.</p>
+        <p>Min grid size is 10x10 and max grid size is 2000x2000.</p>
 
         <p style="margin-bottom: .2rem">Rows:</p>
-        <input type="text" class="form-control" placeholder="" @bind="gridRows" />
+        <input type="number" class="form-control" placeholder="Enter grid rows (e.g., 100)" @bind="gridRows" @oninput="ValidateGridRows" min="10" max="2000" />
         <p style="margin-bottom: .2rem">Columns:</p>
-        <input type="text" class="form-control" style="margin-bottom: 1rem" placeholder="Enter grid columns (e.g., 100)" @bind="gridCols" />
+        <input type="number" class="form-control" style="margin-bottom: 1rem" placeholder="Enter grid columns (e.g., 100)" @bind="gridCols" @oninput="ValidateGridCols" min="10" max="2000" />
         <div class="btn-group" role="group">
-            <button class="btn btn-primary" @onclick="runPythonScript">Generate Grid</button>
+            <button class="btn btn-primary" @onclick="runPythonScript" disabled="@isGenerateButtonDisabled">Generate Grid</button>
             @if (gridWasGenerated)
             {
                 <a class="btn btn-secondary" href="@imageSource" download="grid_world.png">Download Grid PNG</a>
@@ -72,6 +73,7 @@
     private bool gridWasGenerated = File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.png");
     private int gridRows = 100;
     private int gridCols = 100;
+    private bool isGenerateButtonDisabled = false;
 
     protected override Task OnInitializedAsync()
     {
@@ -134,5 +136,36 @@
             gridWasGenerated = false;
             gridResultLines = null;
         }
+    }
+
+    private void ValidateGridRows(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int value))
+        {
+            gridRows = Math.Clamp(value, 10, 2000); // Clamp value between 10 and 2000
+        }
+        else
+        {
+            gridRows = 10; // Default to minimum value if invalid
+        }
+        ValidateGenerateButton();
+    }
+
+    private void ValidateGridCols(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int value))
+        {
+            gridCols = Math.Clamp(value, 10, 2000); // Clamp value between 10 and 2000
+        }
+        else
+        {
+            gridCols = 10; // Default to minimum value if invalid
+        }
+        ValidateGenerateButton();
+    }
+
+    private void ValidateGenerateButton()
+    {
+        isGenerateButtonDisabled = gridRows < 10 || gridRows > 2000 || gridCols < 10 || gridCols > 2000;
     }
 }
