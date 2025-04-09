@@ -26,7 +26,10 @@
             <p>
                 <img src="@imageSource" alt="Grid World" />
             </p>
-            <button class="btn btn-primary" @onclick="deleteImportedGrid">Clear Grid</button>
+            @if (ImportedGrid)
+            {
+                <button class="btn btn-primary" @onclick="deleteImportedGrid">Clear Grid</button>
+            }
         }
     </div>
 
