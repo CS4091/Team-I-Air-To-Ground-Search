@@ -123,8 +123,8 @@ def write_problem_params(
 
 
 if __name__ == "__main__":
-    width = 100  # Width of the grid
-    height = 100  # Height of the grid
+    width = sys.argv[1]  # Width of the grid
+    height = sys.argv[2]  # Height of the grid
 
     # random.seed(42)
 
