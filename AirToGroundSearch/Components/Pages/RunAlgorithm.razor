@@ -78,9 +78,13 @@
                     </select>
                 </div>
                 <div class="col-md-3 form-group">
-                    <button class="btn btn-primary" @onclick="runPythonScript">Run Algorithm</button>
+                    <button class="btn btn-primary" @onclick="ExecuteAlgorithm" disabled="@isRunning">Run Algorithm</button>
                 </div>
             </div>
+            @if (isRunning)
+            {
+                <p>Running...</p>
+            }
         }
     </div>
 </div>
@@ -99,6 +103,7 @@
     private string fileName = "";
     private bool gridWasGenerated = File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.png");
     private string? imageSource;
+    private bool isRunning = false;
 
     protected override Task OnInitializedAsync()
     {
@@ -217,45 +222,46 @@
         }
     }
 
+    private async Task ExecuteAlgorithm()
+    {
+        isRunning = true; // Set running state to true
+        try
+        {
+            await runPythonScript(); // Run the algorithm
+        }
+        finally
+        {
+            isRunning = false; // Reset running state
+        }
+    }
+
     private async Task runPythonScript()
     {
-        // Create a new process
         var psi = new ProcessStartInfo
         {
             FileName = "python",
-            Arguments = $"-m AirToGroundSearch.src.algorithms.{algorithm}", // Use -m to run as a module
+            Arguments = $"-m AirToGroundSearch.src.algorithms.{algorithm}",
             RedirectStandardOutput = true,
             UseShellExecute = false,
             CreateNoWindow = true,
-            WorkingDirectory = "/workspaces/Team-I-Air-To-Ground-Search" // Set the working directory to the project root
+            WorkingDirectory = "/workspaces/Team-I-Air-To-Ground-Search"
         };
 
-        // Start the process
         using (var process = Process.Start(psi))
         {
             if (process != null)
             {
-                // Wait for the process to complete
                 await process.WaitForExitAsync();
 
-                // Read the output
                 using (var reader = process.StandardOutput)
                 {
                     string result = await reader.ReadToEndAsync();
-                    // Output the result to a file
-                    string outputFilePath = string.Empty;
-                    if (algorithm == "a_star")
-                    {
-                        outputFilePath = "./wwwroot/outputs/GridResults/results_a.txt";
-                    }
-                    else if (algorithm == "d_search")
-                    {
-                        outputFilePath = "./wwwroot/outputs/GridResults/results_d.txt";
-                    }
+                    string outputFilePath = algorithm == "a_star"
+                        ? "./wwwroot/outputs/GridResults/results_a.txt"
+                        : "./wwwroot/outputs/GridResults/results_d.txt";
                     File.WriteAllText(outputFilePath, result);
                 }
 
-                // Add a cache-busting query parameter to the image URL
                 var timestamp = DateTime.Now.Ticks;
                 NavigationManager.NavigateTo($"/GridResults?cacheBust={timestamp}");
             }
