@@ -6,7 +6,7 @@
 
 <h1>Air-to-Ground Pathing Algorithm Runner</h1>
 <p>
-    This page runs the pathing algorithm for the air-to-ground search problem.
+    This page runs the pathing algorithm for the air-to-ground search problem. NOTE: Importing a grid deletes any previously generated grid.
 </p>
 
 @if (ImportedGrid is false && !gridWasGenerated)
@@ -15,85 +15,81 @@
     <p></p>
 }
 
-
-@if(gridWasGenerated || ImportedGrid)
-{
+<div class="row">
+    @* Left Column *@
     <div class="col-md-6">
-        <div class="d-flex justify-content-between align-items-center">
-            <h3>Current Grid</h3>
+        @if(gridWasGenerated || ImportedGrid)
+        {
+            <div class="d-flex justify-content-between align-items-center">
+                <h3>Current Grid</h3>
+            </div>
+            <p>
+                <img src="@imageSource" alt="Grid World" />
+            </p>
             <button class="btn btn-primary" @onclick="deleteImportedGrid">Clear Grid</button>
-        </div>
-        <p>
-            <img src="@imageSource" alt="Grid World" />
-        </p>
+        }
     </div>
-}
 
-<div class="col-md-6">
-    <h4>Import a new grid?</h4>
-    <p>Upload a new Grid to run the pathing algorithm on.</p>
-    @if (!clearFileInputs)
-    {
-        <div class="row">
-            <div class="col-md-6 form-group">
-                <p>Upload CSV:</p>
-                <InputFile OnChange="UploadGrid" accept=".csv" />
-                <p></p>
+    @* Right Column *@
+    <div class="col-md-6">
+        <h4>Import a new grid?</h4>
+        <p>Upload a new Grid to run the pathing algorithm on.</p>
+        @if (!clearFileInputs)
+        {
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <p>Upload CSV:</p>
+                    <InputFile OnChange="UploadGrid" accept=".csv" />
+                    <p></p>
+                </div>
+                <div class="col-md-6 form-group">
+                    <p>Upload JSON:</p>
+                    <InputFile OnChange="UploadGrid" accept=".json" />
+                    <p></p>
+                </div>
+                <div class="col-md-6 form-group">
+                    <p>Upload PNG:</p>
+                    <InputFile OnChange="UploadGrid" accept=".png" />
+                    <p></p>
+                </div>
+                <div class="col-md-6 form-group">
+                    <p>Upload TXT:</p>
+                    <InputFile OnChange="UploadGrid" accept=".txt" />
+                    <p></p>
+                </div>
             </div>
-            <div class="col-md-6 form-group">
-                <p>Upload JSON:</p>
-                <InputFile OnChange="UploadGrid" accept=".json" />
-                <p></p>
+        }
+
+        @if (ImportedGrid)
+        {
+            <p>Grid imported successfully!</p>
+        }
+
+        @if(gridWasGenerated || ImportedGrid)
+        {
+            <label for="algorithm">Select an algorithm:</label>
+            <p></p>
+
+            <div class="row" style="max-width: 800px;">
+                <div class="col-md-4 form-group">
+                    <select class="form-control" id="algorithm" @bind="algorithm">
+                        <option value="a_star">A*</option>
+                        <option value="d_search">Dijkstra</option>
+                    </select>
+                </div>
+                <div class="col-md-3 form-group">
+                    <button class="btn btn-primary" @onclick="ExecuteAlgorithm" disabled="@isRunning">Run Algorithm</button>
+                </div>
             </div>
-            <div class="col-md-6 form-group">
-                <p>Upload PNG:</p>
-                <InputFile OnChange="UploadGrid" accept=".png" />
-                <p></p>
-            </div>
-            <div class="col-md-6 form-group">
-                <p>Upload TXT:</p>
-                <InputFile OnChange="UploadGrid" accept=".txt" />
-                <p></p>
-            </div>
-        </div>
-    }
+            @if (isRunning)
+            {
+                <p>Running...</p>
+            }
+        }
+    </div>
 </div>
 
-
-@if (ImportedGrid)
-{
-    <p>Grid imported successfully!</p>
-}
-
-@if(gridWasGenerated||ImportedGrid)
-{
-    <label for="algorithm">Select an algorithm:</label>
-    <p></p>
-
-    <div class="row" style="max-width: 800px;">
-        <div class="col-md-4 form-group">
-            <select class="form-control" id="algorithm" @bind="algorithm">
-                <option value="a_star">A*</option>
-                <option value="dijkstra">Dijkstra</option>
-            </select>
-        </div>
-        <div class="col-md-3 form-group">
-            <button class="btn btn-primary" @onclick="runPythonScript">Run Algorithm</button>
-        </div>
-    </div>
-
-    <p></p>
-    <p role="status">Output:</p>
-    @if (gridResultLines != null)
-    {
-        <ul>
-            @foreach (var line in gridResultLines)
-            {
-                <li>@line</li>
-            }
-        </ul>
-    }
-}
+@inject NavigationManager NavigationManager
 
 @code {
     private List<string> gridResultLines = new List<string>();
@@ -107,6 +103,7 @@
     private string fileName = "";
     private bool gridWasGenerated = File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.png");
     private string? imageSource;
+    private bool isRunning = false;
 
     protected override Task OnInitializedAsync()
     {
@@ -175,7 +172,24 @@
             }
         }
         // Save the file
-        var filePath = $"./wwwroot/outputs/ImportedGrid/{fileName}";
+        var newFileName = Path.GetExtension(file.Name);
+        if (fileName.Contains(".png"))
+        {
+            newFileName = "grid_world.png";
+        }
+        else if (fileName.Contains(".json"))
+        {
+            newFileName = "grid_world_params.json";
+        }
+        else if (fileName.Contains(".csv"))
+        {
+            newFileName = "grid_world.csv";
+        }
+        else if (fileName.Contains(".txt"))
+        {
+            newFileName = "grid_world.txt";
+        }
+        var filePath = $"./wwwroot/outputs/ImportedGrid/{newFileName}";
         await using (var fileStream = file.OpenReadStream())
         await using (var outputStream = File.Create(filePath))
         {
@@ -184,7 +198,7 @@
         if (fileName.Contains(".png"))
         {
             importedPNG = true;
-            imageSource = $"outputs/ImportedGrid/{fileName}?{Guid.NewGuid()}";
+            imageSource = $"outputs/ImportedGrid/{newFileName}?{Guid.NewGuid()}";
         }
         if (fileName.Contains(".json"))
         {
@@ -208,29 +222,48 @@
         }
     }
 
-    private void runPythonScript()
+    private async Task ExecuteAlgorithm()
     {
-        // Create a new process
+        isRunning = true; // Set running state to true
+        try
+        {
+            await runPythonScript(); // Run the algorithm
+        }
+        finally
+        {
+            isRunning = false; // Reset running state
+        }
+    }
+
+    private async Task runPythonScript()
+    {
         var psi = new ProcessStartInfo
         {
             FileName = "python",
-            Arguments = $"src/algorithms/{algorithm}.py",
+            Arguments = $"-m AirToGroundSearch.src.algorithms.{algorithm}",
             RedirectStandardOutput = true,
             UseShellExecute = false,
-            CreateNoWindow = true
+            CreateNoWindow = true,
+            WorkingDirectory = "/workspaces/Team-I-Air-To-Ground-Search"
         };
 
-        // Start the process
         using (var process = Process.Start(psi))
         {
             if (process != null)
             {
-                // Read the output
+                await process.WaitForExitAsync();
+
                 using (var reader = process.StandardOutput)
                 {
-                    string result = reader.ReadToEnd();
-                    gridResultLines = result.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    string result = await reader.ReadToEndAsync();
+                    string outputFilePath = algorithm == "a_star"
+                        ? "./wwwroot/outputs/GridResults/results_a.txt"
+                        : "./wwwroot/outputs/GridResults/results_d.txt";
+                    File.WriteAllText(outputFilePath, result);
                 }
+
+                var timestamp = DateTime.Now.Ticks;
+                NavigationManager.NavigateTo($"/GridResults?cacheBust={timestamp}");
             }
         }
     }
@@ -255,25 +288,16 @@
         importedCSV = false;
         importedTXT = false;
 
-        if (gridWasGenerated)
-        {
-            // Delete all files in the GeneratedGrid directory
-            var generatedGridFiles = Directory.GetFiles("wwwroot/outputs/GeneratedGrid");
-            foreach (var file in generatedGridFiles)
-            {
-                @if(!file.Contains(".gitignore"))
-                    {
-                        File.Delete(file);
-                    }
-            }
-            gridWasGenerated = false;
-        }
-
         // Trigger re-render to reset file inputs
         clearFileInputs = true;
         await Task.Delay(10); // Ensure the render cycle completes
         clearFileInputs = false;
         ImportedGrid = false;
+
+        if(gridWasGenerated)
+        {
+            imageSource = $"outputs/GeneratedGrid/grid_world.png?{Guid.NewGuid()}";
+        }
     }
 
 }
