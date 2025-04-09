@@ -12,8 +12,7 @@
     "--privileged"
   ],
   // Mount shared workspace volumes. Bind from host machine to container.
-  "mounts": ["source=${env:SSH_AUTH_SOCK},target=/ssh-agent,type=bind"],
-  "remoteEnv": { "SSH_AUTH_SOCK": "/ssh-agent" },
+  "mounts": [],
   // "image": "mcr.microsoft.com/devcontainers/base:jammy",
   "build": {
     "dockerfile": "Dockerfile"
