@@ -30,6 +30,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9HZW5lcmF0ZUdyaWQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/Components/Pages/GridResults.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9HcmlkUmVzdWx0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 

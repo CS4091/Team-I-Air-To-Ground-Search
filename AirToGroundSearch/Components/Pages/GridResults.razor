@@ -1,0 +1,122 @@
+@page "/GridResults"
+@using System.Diagnostics
+@inject NavigationManager NavigationManager
+
+<PageTitle>Air-to-Ground Pathing Results</PageTitle>
+
+<h1>Air-to-Ground Pathing Results</h1>
+<div class="row">
+    @if (aStarGenerated)
+    {
+        <div class="col-md-6">
+            <div class="row" style="padding-bottom: 20px;">
+                <h3>A* Grid Path</h3>
+            </div>
+            
+            <div class="row" style="padding-bottom: 20px;">
+                <img src="@aStarImageSource" 
+                     alt="Grid World"/>
+            </div>
+            
+            <div class="row" style="padding-bottom: 20px;">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-secondary" href="@aStarImageSource" download="results_a.png">
+                        Download Results PNG
+                    </a>
+                    <a class="btn btn-secondary" href="@aStarTextSource" download="results_a.txt">
+                        Download Results TXT
+                    </a>
+                    <a class="btn btn-secondary" href="@aStarCSVSource" download="results_a.csv">
+                        Download Results CSV
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (dijkstraGenerated)
+    {
+        <div class="col-md-6">
+            <div class="row" style="padding-bottom: 20px;">
+                <h3>Dijkstra Grid Path</h3>
+            </div>
+            
+            <div class="row" style="padding-bottom: 20px;">
+                <img src="@dijkstraImageSource" 
+                     alt="Grid World"/>
+            </div>
+            
+            <div class="row" style="padding-bottom: 20px;">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-secondary" href="@dijkstraImageSource" download="results_d.png">
+                        Download Results PNG
+                    </a>
+                    <a class="btn btn-secondary" href="@dijkstraTextSource" download="results_d.txt">
+                        Download Results TXT
+                    </a>
+                    <a class="btn btn-secondary" href="@dijkstraCSVSource" download="results_d.csv">
+                        Download Results CSV
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (dijkstraGenerated)
+    {
+        <div class="col-md-6">
+            <h3>Dijkstra Results</h3>
+            @foreach (var line in File.ReadLines("./wwwroot/outputs/GridResults/results_d.txt"))
+            {
+                <p>@line</p>
+            }
+        </div>
+    }
+    @if (aStarGenerated)
+    {
+        <div class="col-md-6">
+            <h3>A* Results</h3>
+            @foreach (var line in File.ReadLines("./wwwroot/outputs/GridResults/results_a.txt"))
+            {
+                <p>@line</p>
+            }
+        </div>
+    }
+
+    else if (!aStarGenerated && !dijkstraGenerated)
+    {
+        <h6>No results generated yet. Please run the algorithm first.</h6>
+        <a href="runalgorithm">
+            <button class="btn btn-primary" >Run Algorithm</button>
+        </a>
+    }
+</div>
+
+@code {
+    private bool aStarGenerated = false;
+    private bool dijkstraGenerated = false;
+
+    private string? aStarImageSource = "";
+    private string? aStarTextSource = "";
+    private string? aStarCSVSource = "";
+    private string? dijkstraImageSource = "";
+    private string? dijkstraTextSource = "";
+    private string? dijkstraCSVSource = "";
+
+    protected override Task OnInitializedAsync()
+    {
+        if(File.Exists("./wwwroot/outputs/GridResults/results_a.png")){
+            aStarGenerated = true;
+            aStarImageSource = $"outputs/GridResults/results_a.png?{Guid.NewGuid()}";
+            aStarTextSource = $"outputs/GridResults/results_a.txt?{Guid.NewGuid()}";
+            aStarCSVSource = $"outputs/GridResults/results_a.csv?{Guid.NewGuid()}";
+        }
+        if(File.Exists("./wwwroot/outputs/GridResults/results_d.png")){
+            dijkstraGenerated = true;
+            dijkstraImageSource = $"outputs/GridResults/results_d.png?{Guid.NewGuid()}";
+            dijkstraTextSource = $"outputs/GridResults/results_d.txt?{Guid.NewGuid()}";
+            dijkstraCSVSource = $"outputs/GridResults/results_d.csv?{Guid.NewGuid()}";
+        }
+        return Task.CompletedTask;
+    }
+}

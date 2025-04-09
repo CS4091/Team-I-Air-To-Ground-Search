@@ -79,7 +79,7 @@ def update_scanned_grid(drone, scanned_grid):
         ]
 
     for r, c in view:
-        if 0 <= r < scanned_grid.shape[0] and 0 <= c < scanned_grid.shape[1] and scanned_grid[r, c] != 1:
+        if 0 <= r < scanned_grid.shape[0] and 0 <= c < scanned_grid.shape[1] and scanned_grid[r, c] != 1 and scanned_grid[r, c] != 3:
             scanned_grid[r, c] = 2
         
 
