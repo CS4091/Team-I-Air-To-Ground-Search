@@ -282,25 +282,16 @@
         importedCSV = false;
         importedTXT = false;
 
-        if (gridWasGenerated)
-        {
-            // Delete all files in the GeneratedGrid directory
-            var generatedGridFiles = Directory.GetFiles("wwwroot/outputs/GeneratedGrid");
-            foreach (var file in generatedGridFiles)
-            {
-                @if(!file.Contains(".gitignore"))
-                    {
-                        File.Delete(file);
-                    }
-            }
-            gridWasGenerated = false;
-        }
-
         // Trigger re-render to reset file inputs
         clearFileInputs = true;
         await Task.Delay(10); // Ensure the render cycle completes
         clearFileInputs = false;
         ImportedGrid = false;
+
+        if(gridWasGenerated)
+        {
+            imageSource = $"outputs/GeneratedGrid/grid_world.png?{Guid.NewGuid()}";
+        }
     }
 
 }
