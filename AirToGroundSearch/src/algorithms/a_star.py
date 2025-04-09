@@ -14,34 +14,30 @@ Direction = {"N": 1, "S": -1, "E": 1, "W": -1}
 
 class Cell:
     @staticmethod
-    def h(fuel_range, cells_explored):
-        return fuel_range / cells_explored
+    def h(goal_condition, cells_explored):
+        return goal_condition - cells_explored
 
     def __init__(
         self,
         current: Location,
         direction: Literal["N", "S", "E", "W"],
-        fuel_range: int,
+        goal_condition: int,
         g_score: float = math.inf,
-        f_score: float = math.inf,
         explored: set[Location] = set(),
         # navigated_to: list[Location] = [],
         # came_from: Location | None = None,
     ):
         self.m, self.n = current
         self.dir = direction
-        self.explored = explored
+        # self.explored = explored
         # self.navigated_to = navigated_to
         # if came_from:
         #     self.navigated_to.append(came_from)
-        self.fuel_range = fuel_range
+        self.goal_condition = goal_condition
 
         self.g_score = g_score
 
-        if not self.explored:
-            self.f_score = f_score
-        else:
-            self.f_score = g_score + self.h(fuel_range, len(self.explored))
+        self.f_score = g_score + self.h(goal_condition, len(explored))
 
     def __lt__(self, other):
         return self.f_score < other.f_score
@@ -53,12 +49,21 @@ class Cell:
 
     def __eq__(self, other):
         if isinstance(other, Cell):
-            return (self.m, self.n, self.dir) == (other.m, other.n, other.dir) and len(
-                self.explored
-            ) == len(other.explored)
+            return (self.m, self.n, self.dir, self.f_score) == (
+                other.m,
+                other.n,
+                other.dir,
+                other.f_score,
+            )
 
-    def add_explored(self, i: int, j: int):
-        self.explored.add((i, j))
+    def __str__(self):
+        return f"{self.m},{self.n},{self.dir},{self.f_score}"
+
+    def __hash__(self):
+        return hash(str(self))
+
+    # def add_explored(self, i: int, j: int):
+    #     self.explored.add((i, j))
 
     def get_dir_neighbor(self, i, j):
         if self.m - i > 0 and self.n - j == 0:
@@ -70,55 +75,65 @@ class Cell:
         elif self.m - i == 0 and self.n - j < 0:
             return "W"
 
-    def update_scores(self, g_score: float):
+    def update_scores(self, explored, g_score: float):
         self.g_score = g_score
-        self.f_score = self.h(self.fuel_range, len(self.explored))
+        self.f_score = self.g_score + self.h(self.goal_condition, len(explored))
 
-    def reached_goal(self, grid_size: int, goal_condition: float):
-        return len(self.explored) >= grid_size * goal_condition
+    def reached_goal(self, explored, goal_condition: float):
+        return len(explored) >= goal_condition
 
     def scan_area(self, grid: TwoDimGraph, range_row: int, range_col: int):
         m, n, dir = self.m, self.n, self.dir
+        explored = set()
         if dir == "N" or dir == "S":
             for j in range(n - (range_col // 2), n + (range_col // 2) + 1):
                 for i in range(
                     m + Direction[dir], m + (range_row * Direction[dir]) + 1
                 ):
-                    if (i, j) in self.explored or i >= grid.m or j >= grid.n:
+                    if 0 > i or i >= grid.m or 0 > j or j >= grid.n:
                         continue
-                    self.add_explored(i, j)
+                    explored.add((i, j))
                     if grid.is_val(i, j, 1):
                         break
         else:
             for i in range(m - (range_row // 2), m + (range_row // 2) + 1):
                 for j in range(n + Direction[dir], n + (Direction[dir] * range_col)):
-                    if (i, j) in self.explored or i >= grid.m or j >= grid.n:
+                    if 0 > i or i >= grid.m or 0 > j or j >= grid.n:
                         continue
-                    self.add_explored(i, j)
+                    explored.add((i, j))
                     if grid.is_val(i, j, 1):
                         break
+        return explored
 
 
-def backtrace_path(grid: TwoDimGraph, current: Cell, came_from: dict):
+def backtrace_path(grid: TwoDimGraph, current: Cell, came_from: dict, explored):
     output_grid = np.array(grid.vertices).reshape(grid.shape())
-    for location in current.explored:
-        i, j = location
+    for i, j in explored:
         output_grid[i][j] = 2
     path = []
-    cell_key = (current.m, current.n, current.dir)
 
+    cell_key = current
     while cell_key in came_from:
-        path.append((cell_key[0], cell_key[1]))
+        path.append(cell_key)
         cell_key = came_from[cell_key]
-    path.reverse()
-    for i, j in path:
+    path
+    for cell in path:
+        i, j = cell.m, cell.n
         output_grid[i][j] = 3
 
     if path:
-        start_m, start_n = path[0]
+        start_m, start_n = path[0].m, path[0].n
         output_grid[start_m][start_n] = 4
-
-    display_grid(output_grid, name=f"a_star_search.csv")
+    np.savetxt(
+        "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_a.csv",
+        output_grid,
+        delimiter=",",
+        fmt="%d",
+    )
+    display_grid(
+        "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_a.csv",
+        "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_a.png",
+    )
     return True
 
 
@@ -128,40 +143,49 @@ def a_star_search(
     radar_range: Tuple[int, int],
     fuel_range: int,
     direction: Literal["N", "S", "E", "W"] = "N",  # N, S, E, W
-    goal_condition: float = 0.8,
+    goal_condition: int = 10,
 ):
     start_row, start_col = start_index
     range_row, range_col = radar_range
+    goal_condition = (grid.grid_size() // 100) * goal_condition
+    first = Cell(
+        (start_row, start_col),
+        direction,
+        goal_condition,
+        g_score=0,
+    )
 
     open_set = []
     heapify(open_set)
     heappush(
         open_set,
-        Cell(
-            (start_row, start_col),
-            direction,
-            fuel_range,
-            g_score=0,
-        ),
+        first,
     )
 
     open_set_lookup = set()
-    open_set_lookup.add((start_row, start_col, direction))
+    open_set_lookup.add(first)
 
-    came_from = {}
-    g_scores = {(start_row, start_col, direction): 0}
+    came_from: dict[Cell, Cell] = {}
+    explored: dict[Cell, set] = {first: set()}
+    g_scores: dict[Cell, int] = {first: 0}
+
+    best = first
 
     while open_set:
         # Pop cell of lowest fscore value
         current: Cell = heappop(open_set)
-        open_set_lookup.remove((current.m, current.n, current.dir, len(current.explored)))
+        open_set_lookup.remove(current)
 
         # Commence radar scan!
-        current.scan_area(grid, range_row, range_col)
+        new_explored = current.scan_area(grid, range_row, range_col)
+        explored[current] = explored[current].union(new_explored)
+
+        if current.f_score < best.f_score:
+            best = current
 
         # Check if cell meets goal condition
-        if current.reached_goal(grid.grid_size(), goal_condition):
-            return backtrace_path(grid, current, came_from)
+        if current.reached_goal(explored[current], goal_condition):
+            return backtrace_path(grid, current, came_from, explored[current])
 
         if current.g_score + 1 >= fuel_range:
             continue
@@ -171,26 +195,28 @@ def a_star_search(
         for i, j in grid.get_neighbors(current.m, current.n):
             new_dir = current.get_dir_neighbor(i, j)
             new_g_score = current.g_score + 1
-            neighbor_key = (i, j, new_dir)
+            # new_neighbor = (i, j, new_dir)
+            new_neighbor = Cell(
+                (i, j),
+                new_dir,
+                goal_condition,
+                explored=explored[current],
+                g_score=current.g_score + 1,
+            )
             # Elimination conditions
-            if neighbor_key in came_from or grid.is_val(i, j, 1):
+            if new_neighbor in came_from or grid.is_val(i, j, 1):
                 continue
 
-            if neighbor_key not in g_scores or new_g_score < g_scores[neighbor_key]:
-                g_scores[neighbor_key] = new_g_score
-                came_from[neighbor_key] = (current.m, current.n)
-                new_neighbor = Cell(
-                    (i, j),
-                    new_dir,
-                    fuel_range,
-                    explored=current.explored.copy(),
-                    g_score=current.g_score + 1,
-                )
+            if new_neighbor not in g_scores or new_g_score < g_scores[new_neighbor]:
+                g_scores[new_neighbor] = new_g_score
+                came_from[new_neighbor] = current
+                explored[new_neighbor] = explored[current]
 
                 if new_neighbor not in open_set:
                     heappush(open_set, new_neighbor)
-                    open_set_lookup.add(neighbor_key)
+                    open_set_lookup.add(new_neighbor)
 
+    backtrace_path(grid, best, came_from)
     return False
 
 
