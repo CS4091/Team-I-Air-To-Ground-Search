@@ -3,8 +3,9 @@ from backend.csv_to_png import display_grid
 import numpy as np
 from heapq import heapify, heappush, heappop
 from typing import Tuple, Literal
+import pathlib
 
-# from collections import defaultdict
+from collections import defaultdict
 import math
 
 Location = Tuple[int, int]
@@ -37,7 +38,7 @@ class Cell:
 
         self.g_score = g_score
 
-        self.f_score = g_score + self.h(goal_condition, len(explored))
+        self.f_score = self.h(goal_condition, len(explored))
 
     def __lt__(self, other):
         return self.f_score < other.f_score
@@ -77,7 +78,7 @@ class Cell:
 
     def update_scores(self, explored, g_score: float):
         self.g_score = g_score
-        self.f_score = self.g_score + self.h(self.goal_condition, len(explored))
+        self.f_score = self.h(self.goal_condition, len(explored))
 
     def reached_goal(self, explored, goal_condition: float):
         return len(explored) >= goal_condition
@@ -86,19 +87,19 @@ class Cell:
         m, n, dir = self.m, self.n, self.dir
         explored = set()
         if dir == "N" or dir == "S":
-            for j in range(n - (range_col // 2), n + (range_col // 2) + 1):
+            for j in range(n - (range_col // 2), n + (range_col // 2) + 1, Direction[dir]):
                 for i in range(
                     m + Direction[dir], m + (range_row * Direction[dir]) + 1
                 ):
-                    if 0 > i or i >= grid.m or 0 > j or j >= grid.n:
+                    if i < 0 or i >= grid.m or j < 0 or j >= grid.n:
                         continue
                     explored.add((i, j))
                     if grid.is_val(i, j, 1):
                         break
         else:
             for i in range(m - (range_row // 2), m + (range_row // 2) + 1):
-                for j in range(n + Direction[dir], n + (Direction[dir] * range_col)):
-                    if 0 > i or i >= grid.m or 0 > j or j >= grid.n:
+                for j in range(n + Direction[dir], n + (Direction[dir] * range_col), Direction[dir]):
+                    if i < 0 or i >= grid.m or j < 0 or j >= grid.n:
                         continue
                     explored.add((i, j))
                     if grid.is_val(i, j, 1):
@@ -124,15 +125,21 @@ def backtrace_path(grid: TwoDimGraph, current: Cell, came_from: dict, explored):
     if path:
         start_m, start_n = path[0].m, path[0].n
         output_grid[start_m][start_n] = 4
+
+    workspace_path = pathlib.Path(__file__).parent.parent.parent
     np.savetxt(
-        "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_a.csv",
+        pathlib.Path(
+            workspace_path / "wwwroot/outputs/GridResults/results_a.csv"
+        ).resolve(),
         output_grid,
         delimiter=",",
         fmt="%d",
     )
     display_grid(
-        "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_a.csv",
-        "/workspaces/Team-I-Ground-to-air-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_a.png",
+        pathlib.Path(
+            workspace_path / "wwwroot/outputs/GridResults/results_a.csv"
+        ).resolve(),
+        pathlib.Path(workspace_path / "wwwroot/outputs/GridResults/results_a.png"),
     )
     return True
 
@@ -143,7 +150,7 @@ def a_star_search(
     radar_range: Tuple[int, int],
     fuel_range: int,
     direction: Literal["N", "S", "E", "W"] = "N",  # N, S, E, W
-    goal_condition: int = 10,
+    goal_condition: int = 20,
 ):
     start_row, start_col = start_index
     range_row, range_col = radar_range
