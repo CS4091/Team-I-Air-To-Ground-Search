@@ -42,7 +42,40 @@ def generate_grid(
 
     return grid
 
+# Wanted a function that marks navigable cells surrounded by unnavigable cells a unnavigable
+def inverse_flood_fill(grid, start_cords):
+    '''
+    Im pretty proud of this one. This uses an algoritm called flood
+    fll to identify the adjacent and related tiles. The smart part
+    here is this is used on the starting coords, then any
+    tile that cant be possibly navigated to gets filled in instead
+    '''
+    rows, cols = grid.shape
+    visited = np.zeros_like(grid, dtype=bool)
 
+    # Helper function for inverse flood fill
+    def flood_fill(r, c):
+        stack = [(r, c)]
+        while stack:
+            cr, cc = stack.pop()
+            if not (0 <= cr < rows and 0 <= cc < cols) or visited[cr, cc] or grid[cr, cc] == 1:
+                    continue
+            
+            visited[cr, cc] = True
+
+            neighbors = [(cr - 1, cc), (cr + 1, cc), (cr, cc - 1), (cr, cc + 1)]
+            stack.extend(neighbors)
+
+    start_row, start_col = start_cords
+    flood_fill(start_row, start_col)
+    
+    # Now, if a tile is NOT visited and 0, mark it as a 1
+
+    for i in range(rows):
+        for j in range(cols):
+            if not visited[i, j] and grid[i, j] == 0:
+                grid[i, j] = 1
+        
 def display_grid(grid, start_coords):
     cmap = mcolors.ListedColormap(["white", "black", "red", "green", "purple"])
     bounds = [0, 1, 2, 3, 4, 5]
@@ -147,6 +180,8 @@ if __name__ == "__main__":
     row, col = write_problem_params(
         pathlib.Path(f"./wwwroot/outputs/GeneratedGrid/grid_world_params.json"), grid
     )
+
+    inverse_flood_fill(grid, (row, col))
 
     display_grid(grid, (row, col))
 
