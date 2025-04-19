@@ -6,6 +6,7 @@ from .graph import TwoDimGraph
 from ..algorithms.a_star import a_star_search
 import os
 
+
 class GridWorld:
     def __init__(self, filepath: pathlib.Path):
         self.filepath: pathlib.Path = filepath
@@ -44,12 +45,16 @@ class GridWorld:
 
 if __name__ == "__main__":
     parent = pathlib.Path(__file__).parent.parent.parent
-    if os.path.exists(pathlib.Path(pathlib.Path(parent / "wwwroot/outputs/ImportedGrid/grid_world.csv"))):
+    if os.path.exists(
+        pathlib.Path(
+            pathlib.Path(parent / "wwwroot/outputs/ImportedGrid/grid_world.csv")
+        )
+    ):
         grid_path = pathlib.Path(parent / "wwwroot/outputs/ImportedGrid").resolve()
     else:
-        grid_path = pathlib.Path(parent / "wwwroot/outputs/GeneratedGrid").resolve()
-    world = GridWorld(
-        grid_path
-    )
+        grid_path = pathlib.Path(
+            parent / "wwwroot/outputs/GeneratedGrid/data"
+        ).resolve()
+    world = GridWorld(grid_path)
     print(world.world_params)
     print(world.run_search())

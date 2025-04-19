@@ -103,7 +103,7 @@ def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: 
 
 if __name__ == "__main__":
     generated_grid_filepath = pathlib.Path(
-        "AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.csv"
+        "AirToGroundSearch/wwwroot/outputs/GeneratedGrid/data/grid_world.csv"
     )
     imported_grid_filepath = pathlib.Path(
         "AirToGroundSearch/wwwroot/outputs/ImportedGrid/grid_world.csv"
@@ -120,7 +120,7 @@ if __name__ == "__main__":
         grid = read_grid_from_csv(generated_grid_filepath)
         start_row, start_col = read_json(
             pathlib.Path(
-                "AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world_params.json"
+                "AirToGroundSearch/wwwroot/outputs/GeneratedGrid/data/grid_world_params.json"
             )
         )
     start = (0, 0)

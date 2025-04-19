@@ -25,36 +25,44 @@
       "PackagePath": "staticwebassets/outputs/GeneratedGrid/.gitignore"
     },
     {
-      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.csv",
-      "PackagePath": "staticwebassets/outputs/GeneratedGrid/grid_world.csv"
-    },
-    {
-      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.png",
-      "PackagePath": "staticwebassets/outputs/GeneratedGrid/grid_world.png"
-    },
-    {
-      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.txt",
-      "PackagePath": "staticwebassets/outputs/GeneratedGrid/grid_world.txt"
-    },
-    {
-      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world_params.json",
-      "PackagePath": "staticwebassets/outputs/GeneratedGrid/grid_world_params.json"
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.zip",
+      "PackagePath": "staticwebassets/outputs/GeneratedGrid/grid_world.zip"
     },
     {
       "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/.gitignore",
       "PackagePath": "staticwebassets/outputs/GridResults/.gitignore"
     },
     {
-      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_d.csv",
-      "PackagePath": "staticwebassets/outputs/GridResults/results_d.csv"
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/ASTAR_Results.zip",
+      "PackagePath": "staticwebassets/outputs/GridResults/ASTAR_Results.zip"
     },
     {
-      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_d.png",
-      "PackagePath": "staticwebassets/outputs/GridResults/results_d.png"
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/ASTAR_Results/results_a.csv",
+      "PackagePath": "staticwebassets/outputs/GridResults/ASTAR_Results/results_a.csv"
     },
     {
-      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/results_d.txt",
-      "PackagePath": "staticwebassets/outputs/GridResults/results_d.txt"
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/ASTAR_Results/results_a.png",
+      "PackagePath": "staticwebassets/outputs/GridResults/ASTAR_Results/results_a.png"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/ASTAR_Results/results_a.txt",
+      "PackagePath": "staticwebassets/outputs/GridResults/ASTAR_Results/results_a.txt"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/Dijkstra_Results.zip",
+      "PackagePath": "staticwebassets/outputs/GridResults/Dijkstra_Results.zip"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/Dijkstra_Results/results_d.csv",
+      "PackagePath": "staticwebassets/outputs/GridResults/Dijkstra_Results/results_d.csv"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/Dijkstra_Results/results_d.png",
+      "PackagePath": "staticwebassets/outputs/GridResults/Dijkstra_Results/results_d.png"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/Dijkstra_Results/results_d.txt",
+      "PackagePath": "staticwebassets/outputs/GridResults/Dijkstra_Results/results_d.txt"
     },
     {
       "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/ImportedGrid/.gitignore",
