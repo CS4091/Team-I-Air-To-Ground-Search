@@ -239,4 +239,3 @@ if __name__ == "__main__":
     )
 
 # TODO detect obstacles and avoid, possibly improve cost function to be based off more than just what's in scanner range
-# To run code be in /workspaces/Team-I-Ground-to-air-Search# python -m AirToGroundSearch.src.algorithms.d_search
