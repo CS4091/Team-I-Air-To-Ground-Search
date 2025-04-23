@@ -1,12 +1,13 @@
 ﻿@page "/RunAlgorithm"
 @using System.Diagnostics
+@using System.IO.Compression
 @rendermode InteractiveServer
 
 <PageTitle>Air-to-Ground Pathing Algorithm Runner</PageTitle>
 
 <h1>Air-to-Ground Pathing Algorithm Runner</h1>
 <p>
-    This page runs the pathing algorithm for the air-to-ground search problem. NOTE: Importing a grid deletes any previously generated grid.
+    This page runs the pathing algorithm for the air-to-ground search problem. NOTE: Importing a grid deletes any previously imported grid.
 </p>
 
 @if (ImportedGrid is false && !gridWasGenerated)
@@ -36,28 +37,13 @@
     @* Right Column *@
     <div class="col-md-6">
         <h4>Import a new grid?</h4>
-        <p>Upload a new Grid to run the pathing algorithm on.</p>
+        <p>Upload a new Grid to run the pathing algorithm on. .zip file must contain a png, csv, and json of the grid.</p>
         @if (!clearFileInputs)
         {
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <p>Upload CSV:</p>
-                    <InputFile OnChange="UploadGrid" accept=".csv" />
-                    <p></p>
-                </div>
-                <div class="col-md-6 form-group">
-                    <p>Upload JSON:</p>
-                    <InputFile OnChange="UploadGrid" accept=".json" />
-                    <p></p>
-                </div>
-                <div class="col-md-6 form-group">
-                    <p>Upload PNG:</p>
-                    <InputFile OnChange="UploadGrid" accept=".png" />
-                    <p></p>
-                </div>
-                <div class="col-md-6 form-group">
-                    <p>Upload TXT:</p>
-                    <InputFile OnChange="UploadGrid" accept=".txt" />
+                    <p>Upload grid:</p>
+                    <InputFile OnChange="UploadGrid" accept=".zip" />
                     <p></p>
                 </div>
             </div>
@@ -98,28 +84,23 @@
     private List<string> gridResultLines = new List<string>();
     private bool clearFileInputs = false;
     private string? algorithm = "a_star";
-    private bool importedPNG = false;
-    private bool importedJSON = false;
-    private bool importedCSV = false;
-    private bool importedTXT = false;
     private bool ImportedGrid = false;
     private string fileName = "";
-    private bool gridWasGenerated = File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.png");
+    private bool gridWasGenerated = File.Exists("./wwwroot/outputs/GeneratedGrid/data/grid_world.png");
     private string? imageSource;
     private bool isRunning = false;
 
     protected override Task OnInitializedAsync()
     {
-        if (File.Exists("./wwwroot/outputs/GeneratedGrid/grid_world.png"))
+        if (File.Exists("./wwwroot/outputs/ImportedGrid/grid_world.png") && File.Exists("./wwwroot/outputs/ImportedGrid/grid_world_params.json") && File.Exists("./wwwroot/outputs/ImportedGrid/grid_world.csv") && File.Exists("./wwwroot/outputs/ImportedGrid/grid_world.txt"))
         {
-            imageSource = $"outputs/GeneratedGrid/grid_world.png?{Guid.NewGuid()}"; 
-        }
-        var importedGridFiles = Directory.GetFiles("./wwwroot/outputs/ImportedGrid", "*.png");
-        if (importedGridFiles.Any())
-        {
-            var fileName = Path.GetFileName(importedGridFiles.First());
-            imageSource = $"outputs/ImportedGrid/{fileName}?{Guid.NewGuid()}";
             ImportedGrid = true;
+            gridWasGenerated = false;
+            imageSource = $"outputs/ImportedGrid/grid_world.png?{Guid.NewGuid()}";
+        }
+        else if (File.Exists("./wwwroot/outputs/GeneratedGrid/data/grid_world.png"))
+        {
+            imageSource = $"outputs/GeneratedGrid/data/grid_world.png?{Guid.NewGuid()}"; 
         }
         return Task.CompletedTask;
     }
@@ -130,6 +111,7 @@
         // Get the uploaded file
         var file = e.File;
         fileName = file.Name;
+
         // Delete all files in the GeneratedGrid directory
         var generatedGridFiles = Directory.GetFiles("wwwroot/outputs/GeneratedGrid");
         foreach (var importedFile in generatedGridFiles)
@@ -140,89 +122,87 @@
             }
             gridWasGenerated = false;
         }
+
         // Delete all files in the ImportedGrid directory
         var importedGridFiles = Directory.GetFiles("wwwroot/outputs/ImportedGrid");
-        if(!importedPNG && !importedJSON && !importedCSV && !importedTXT && !ImportedGrid)
+
+        // If a grid was already imported, delete the old files
+        foreach (var importedFile in importedGridFiles)
         {
-            foreach (var importedFile in importedGridFiles)
+            @if(!importedFile.Contains(".gitignore"))
             {
-                @if(!importedFile.Contains(".gitignore"))
-                {
-                    File.Delete(importedFile);
-                }
+                File.Delete(importedFile);
             }
         }
-        else
-        {
-            foreach (var importedFile in importedGridFiles)
-            {
-                if (importedFile.Contains(".png") && fileName.Contains(".png"))
-                {
-                    File.Delete(importedFile);
-                }
-                if (importedFile.Contains(".json") && fileName.Contains(".json"))
-                {
-                    File.Delete(importedFile);
-                }
-                if (importedFile.Contains(".csv") && fileName.Contains(".csv"))
-                {
-                    File.Delete(importedFile);
-                }
-                if (importedFile.Contains(".txt") && fileName.Contains(".txt"))
-                {
-                    File.Delete(importedFile);
-                }
-            }
-        }
+
         // Save the file
         var newFileName = Path.GetExtension(file.Name);
-        if (fileName.Contains(".png"))
+
+        if (fileName.Contains(".zip"))
         {
-            newFileName = "grid_world.png";
+            newFileName = "Import_Data.zip";
         }
-        else if (fileName.Contains(".json"))
+
+        // Put the zip folder into the ImportedGrid folder
+        var outputDirectory = "./wwwroot/outputs/ImportedGrid";
+        if (!Directory.Exists(outputDirectory))
         {
-            newFileName = "grid_world_params.json";
+            Directory.CreateDirectory(outputDirectory);
         }
-        else if (fileName.Contains(".csv"))
-        {
-            newFileName = "grid_world.csv";
-        }
-        else if (fileName.Contains(".txt"))
-        {
-            newFileName = "grid_world.txt";
-        }
-        var filePath = $"./wwwroot/outputs/ImportedGrid/{newFileName}";
+
+        // Move the uploaded file to the ImportedGrid directory
+        var filePath = Path.Combine(outputDirectory, newFileName);
         await using (var fileStream = file.OpenReadStream())
         await using (var outputStream = File.Create(filePath))
         {
             await fileStream.CopyToAsync(outputStream);
         }
-        if (fileName.Contains(".png"))
+        // Unzip the file
+        if (fileName.Contains(".zip"))
         {
-            importedPNG = true;
-            imageSource = $"outputs/ImportedGrid/{newFileName}?{Guid.NewGuid()}";
+            using (var archive = ZipFile.OpenRead(filePath))
+            {
+                foreach (var entry in archive.Entries)
+                {
+                    if (entry.FullName.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                        entry.FullName.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ||
+                        entry.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase) ||
+                        entry.FullName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Rename file
+                        var extractedFileName = entry.FullName;
+                        if (entry.FullName.Contains(".png"))
+                        {
+                            extractedFileName = "grid_world.png";
+                        }
+                        else if (entry.FullName.Contains(".json"))
+                        {
+                            extractedFileName = "grid_world_params.json";
+                        }
+                        else if (entry.FullName.Contains(".csv"))
+                        {
+                            extractedFileName = "grid_world.csv";
+                        }
+                        else if (entry.FullName.Contains(".txt"))
+                        {
+                            extractedFileName = "grid_world.txt";
+                        }
+                        // Extract the file to the output directory with the new name
+                        var destinationPath = Path.Combine(outputDirectory, extractedFileName);
+                        entry.ExtractToFile(destinationPath, true); // Overwrite if it exists
+                    }
+                }
+            }
         }
-        if (fileName.Contains(".json"))
+
+        // Delete the zip file after extraction
+        if (File.Exists(filePath))
         {
-            importedJSON = true;
+            File.Delete(filePath);
         }
-        if (fileName.Contains(".csv"))
-        {
-            importedCSV = true;
-        }
-        if (fileName.Contains(".txt"))
-        {
-            importedTXT = true;
-        }
-        if (importedPNG && importedJSON && importedCSV && importedTXT)
-        {
-            ImportedGrid = true;
-            importedPNG = false;
-            importedJSON = false;
-            importedCSV = false;
-            importedTXT = false;
-        }
+        
+        imageSource = $"outputs/ImportedGrid/grid_world.png?{Guid.NewGuid()}";
+        ImportedGrid = true;
     }
 
     private async Task ExecuteAlgorithm()
@@ -240,6 +220,22 @@
 
     private async Task runPythonScript()
     {
+        // create results folder if it doesn't exist already
+        if (algorithm == "backend.load_world")
+        {
+            if (!Directory.Exists("./wwwroot/outputs/GridResults/ASTAR_Results"))
+            {
+                Directory.CreateDirectory("./wwwroot/outputs/GridResults/ASTAR_Results");
+            }
+        }
+        else if (algorithm == "algorithms.d_search")
+        {
+            if (!Directory.Exists("./wwwroot/outputs/GridResults/Dijkstra_Results"))
+            {
+                Directory.CreateDirectory("./wwwroot/outputs/GridResults/Dijkstra_Results");
+            }
+        }
+
         var psi = new ProcessStartInfo
         {
             FileName = "python",
@@ -265,7 +261,47 @@
                     File.WriteAllText(outputFilePath, result);
                 }
 
+                // Move all generated files into the correct folder
+                var generatedFiles = Directory.GetFiles("./wwwroot/outputs/GridResults", "*.*", SearchOption.TopDirectoryOnly);
+                foreach (var file in generatedFiles)
+                {
+                    var fileName = Path.GetFileName(file);
+                    if (fileName.Contains(".png") || fileName.Contains(".txt") || fileName.Contains(".csv"))
+                    {
+                        if (algorithm == "backend.load_world")
+                        {
+                            if(File.Exists($"./wwwroot/outputs/GridResults/ASTAR_Results/{fileName}"))
+                            {
+                                File.Delete($"./wwwroot/outputs/GridResults/ASTAR_Results/{fileName}");
+                            }
+                            File.Move(file, $"./wwwroot/outputs/GridResults/ASTAR_Results/{fileName}");
+
+                        }
+                        else if (algorithm == "algorithms.d_search")
+                        {
+                            if(File.Exists($"./wwwroot/outputs/GridResults/Dijkstra_Results/{fileName}"))
+                            {
+                                File.Delete($"./wwwroot/outputs/GridResults/Dijkstra_Results/{fileName}");
+                            }
+                            File.Move(file, $"./wwwroot/outputs/GridResults/Dijkstra_Results/{fileName}");
+                        }
+                    }
+                }
+
+                //Zip the results folder
+                var zipFilePath = algorithm == "backend.load_world"
+                    ? "./wwwroot/outputs/GridResults/ASTAR_Results.zip"
+                    : "./wwwroot/outputs/GridResults/Dijkstra_Results.zip";
+                var resultsFolderPath = algorithm == "backend.load_world"
+                    ? "./wwwroot/outputs/GridResults/ASTAR_Results"
+                    : "./wwwroot/outputs/GridResults/Dijkstra_Results";
+                if (File.Exists(zipFilePath))
+                {
+                    File.Delete(zipFilePath);
+                }
+                ZipFile.CreateFromDirectory(resultsFolderPath, zipFilePath);
                 var timestamp = DateTime.Now.Ticks;
+                // Navigate to the results page with a cache buster
                 NavigationManager.NavigateTo($"/GridResults?cacheBust={timestamp}");
             }
         }
@@ -283,13 +319,15 @@
             }
         }
 
+        if (File.Exists("./wwwroot/outputs/GeneratedGrid/data/grid_world.png"))
+        {
+            gridWasGenerated = true;
+            imageSource = $"outputs/GeneratedGrid/data/grid_world.png?{Guid.NewGuid()}";
+        }
+
         // Reset states
         imageSource = null;
         ImportedGrid = false;
-        importedPNG = false;
-        importedJSON = false;
-        importedCSV = false;
-        importedTXT = false;
 
         // Trigger re-render to reset file inputs
         clearFileInputs = true;
@@ -299,7 +337,7 @@
 
         if(gridWasGenerated)
         {
-            imageSource = $"outputs/GeneratedGrid/grid_world.png?{Guid.NewGuid()}";
+            imageSource = $"outputs/GeneratedGrid/data/grid_world.png?{Guid.NewGuid()}";
         }
     }
 

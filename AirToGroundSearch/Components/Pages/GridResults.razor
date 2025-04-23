@@ -17,20 +17,6 @@
                 <img src="@aStarImageSource" 
                      alt="Grid World"/>
             </div>
-            
-            <div class="row" style="padding-bottom: 20px;">
-                <div class="btn-group" role="group">
-                    <a class="btn btn-secondary" href="@aStarImageSource" download="results_a.png">
-                        Download Results PNG
-                    </a>
-                    <a class="btn btn-secondary" href="@aStarTextSource" download="results_a.txt">
-                        Download Results TXT
-                    </a>
-                    <a class="btn btn-secondary" href="@aStarCSVSource" download="results_a.csv">
-                        Download Results CSV
-                    </a>
-                </div>
-            </div>
         </div>
     }
 
@@ -45,20 +31,6 @@
                 <img src="@dijkstraImageSource" 
                      alt="Grid World"/>
             </div>
-            
-            <div class="row" style="padding-bottom: 20px;">
-                <div class="btn-group" role="group">
-                    <a class="btn btn-secondary" href="@dijkstraImageSource" download="results_d.png">
-                        Download Results PNG
-                    </a>
-                    <a class="btn btn-secondary" href="@dijkstraTextSource" download="results_d.txt">
-                        Download Results TXT
-                    </a>
-                    <a class="btn btn-secondary" href="@dijkstraCSVSource" download="results_d.csv">
-                        Download Results CSV
-                    </a>
-                </div>
-            </div>
         </div>
     }
 
@@ -66,20 +38,22 @@
     {
         <div class="col-md-6">
             <h3>A* Results</h3>
-            @foreach (var line in File.ReadLines("./wwwroot/outputs/GridResults/results_a.txt"))
+            @foreach (var line in File.ReadLines("./wwwroot/outputs/GridResults/ASTAR_Results/results_a.txt"))
             {
                 <p>@line</p>
             }
+            <a class="btn btn-primary" style="margin-bottom: 1rem" href="@aStarZipFilePath" download="ASTAR_Results.zip">Download A* Results</a>
         </div>
     }
     @if (dijkstraGenerated)
     {
         <div class="col-md-6">
             <h3>Dijkstra Results</h3>
-            @foreach (var line in File.ReadLines("./wwwroot/outputs/GridResults/results_d.txt"))
+            @foreach (var line in File.ReadLines("./wwwroot/outputs/GridResults/Dijkstra_Results/results_d.txt"))
             {
                 <p>@line</p>
             }
+            <a class="btn btn-primary" style="margin-bottom: 1rem" href="@dijkstraZipFilePath" download="Dijkstra_Results.zip">Download Dijkstra Results</a>
         </div>
     }
 
@@ -98,24 +72,28 @@
 
     private string? aStarImageSource = "";
     private string? aStarTextSource = "";
-    private string? aStarCSVSource = "";
     private string? dijkstraImageSource = "";
     private string? dijkstraTextSource = "";
-    private string? dijkstraCSVSource = "";
+    private string? aStarZipFilePath = "";
+    private string? dijkstraZipFilePath = "";
 
     protected override Task OnInitializedAsync()
     {
-        if(File.Exists("./wwwroot/outputs/GridResults/results_a.png")){
+        if(File.Exists("./wwwroot/outputs/GridResults/ASTAR_Results/results_a.png")){
             aStarGenerated = true;
-            aStarImageSource = $"outputs/GridResults/results_a.png?{Guid.NewGuid()}";
-            aStarTextSource = $"outputs/GridResults/results_a.txt?{Guid.NewGuid()}";
-            aStarCSVSource = $"outputs/GridResults/results_a.csv?{Guid.NewGuid()}";
+            aStarImageSource = $"outputs/GridResults/ASTAR_Results/results_a.png?{Guid.NewGuid()}";
+            aStarTextSource = $"outputs/GridResults/ASTAR_Results/results_a.txt?{Guid.NewGuid()}";
         }
-        if(File.Exists("./wwwroot/outputs/GridResults/results_d.png")){
+        if(File.Exists("./wwwroot/outputs/GridResults/Dijkstra_Results/results_d.png")){
             dijkstraGenerated = true;
-            dijkstraImageSource = $"outputs/GridResults/results_d.png?{Guid.NewGuid()}";
-            dijkstraTextSource = $"outputs/GridResults/results_d.txt?{Guid.NewGuid()}";
-            dijkstraCSVSource = $"outputs/GridResults/results_d.csv?{Guid.NewGuid()}";
+            dijkstraImageSource = $"outputs/GridResults/Dijkstra_Results/results_d.png?{Guid.NewGuid()}";
+            dijkstraTextSource = $"outputs/GridResults/Dijkstra_Results/results_d.txt?{Guid.NewGuid()}";
+        }
+        if(File.Exists("./wwwroot/outputs/GridResults/ASTAR_Results.zip")){
+            aStarZipFilePath = $"outputs/GridResults/ASTAR_Results.zip?{Guid.NewGuid()}";
+        }
+        if(File.Exists("./wwwroot/outputs/GridResults/Dijkstra_Results.zip")){
+            dijkstraZipFilePath = $"outputs/GridResults/Dijkstra_Results.zip?{Guid.NewGuid()}";
         }
         return Task.CompletedTask;
     }

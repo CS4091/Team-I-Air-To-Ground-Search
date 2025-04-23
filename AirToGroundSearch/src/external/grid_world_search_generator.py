@@ -8,8 +8,11 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from noise import snoise2
 
-# Redirect standard output to a file
-sys.stdout = open("./wwwroot/outputs/GeneratedGrid/grid_world.txt", "w")
+# Redirect standard output to a file (create it if it doesnt exist)
+output_file_path = pathlib.Path("./wwwroot/outputs/GeneratedGrid/data/grid_world.txt")
+output_file_path.parent.mkdir(parents=True, exist_ok=True)
+output_file_path.touch(exist_ok=True)
+sys.stdout = open(output_file_path, "w")
 
 # This script generates a 2D grid world of clear spaces and obstacles. The world
 # is represented by a 2D array of zeroes and ones. Zeroes are clear free space
@@ -41,6 +44,45 @@ def generate_grid(
                 grid[y, x] = 1  # Obstacle
 
     return grid
+
+
+# Wanted a function that marks navigable cells surrounded by unnavigable cells a unnavigable
+def inverse_flood_fill(grid, start_cords):
+    """
+    Im pretty proud of this one. This uses an algoritm called flood
+    fll to identify the adjacent and related tiles. The smart part
+    here is this is used on the starting coords, then any
+    tile that cant be possibly navigated to gets filled in instead
+    """
+    rows, cols = grid.shape
+    visited = np.zeros_like(grid, dtype=bool)
+
+    # Helper function for inverse flood fill
+    def flood_fill(r, c):
+        stack = [(r, c)]
+        while stack:
+            cr, cc = stack.pop()
+            if (
+                not (0 <= cr < rows and 0 <= cc < cols)
+                or visited[cr, cc]
+                or grid[cr, cc] == 1
+            ):
+                continue
+
+            visited[cr, cc] = True
+
+            neighbors = [(cr - 1, cc), (cr + 1, cc), (cr, cc - 1), (cr, cc + 1)]
+            stack.extend(neighbors)
+
+    start_row, start_col = start_cords
+    flood_fill(start_row, start_col)
+
+    # Now, if a tile is NOT visited and 0, mark it as a 1
+
+    for i in range(rows):
+        for j in range(cols):
+            if not visited[i, j] and grid[i, j] == 0:
+                grid[i, j] = 1
 
 
 def display_grid(grid, start_coords):
@@ -147,6 +189,8 @@ if __name__ == "__main__":
     row, col = write_problem_params(
         pathlib.Path(f"./wwwroot/outputs/GeneratedGrid/grid_world_params.json"), grid
     )
+
+    inverse_flood_fill(grid, (row, col))
 
     display_grid(grid, (row, col))
 
