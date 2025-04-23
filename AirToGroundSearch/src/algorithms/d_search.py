@@ -3,8 +3,10 @@ import json
 import heapq
 import pathlib
 import os
+import time
 from ..external.drone import (
     Drone,
+    Direction,
     update_scanned_grid,
     read_grid_from_csv,
     calculate_coverage,
@@ -22,9 +24,7 @@ def read_json(filepath):
 
 def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: Drone):
     rows, cols = grid.shape
-    # print(f"Start Position: {drone.row} {drone.col}")
     start = (drone.row, drone.col)
-    # print(drone.row, drone)
     costs = np.full((rows, cols), np.inf)
     visited = np.zeros_like(grid, dtype=bool)
     queue = []
@@ -32,24 +32,22 @@ def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: 
     heapq.heappush(queue, (0, start, start_direction))
     costs[start] = 0
     moves = 0
+    fuel_used = 0
+    paths_considered = 0
+    start_time = time.time()
 
-    #while queue and moves < fuel:
-    while calculate_coverage(scanned_grid, grid) <= 80:
-        current_cost, (current_row, current_col), current_direction = heapq.heappop(
-            queue
-        )
-        # print(current_direction)
+    while calculate_coverage(scanned_grid, grid) <= 80 and fuel_used < fuel:
+        current_cost, (current_row, current_col), current_direction = heapq.heappop(queue)
 
         if visited[current_row, current_col]:
             continue
 
         visited[current_row, current_col] = True
-        #previous_row = drone.row
-        #previous_col = drone.col
         drone.row, drone.col = current_row, current_col
         drone.direction = current_direction
         update_scanned_grid(drone, scanned_grid)
         moves += 1
+
         forward = drone.direction
         drone.turn_left()
         left = drone.direction
@@ -78,28 +76,116 @@ def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: 
                 0 <= neighbor_row < rows
                 and 0 <= neighbor_col < cols
                 and not visited[neighbor_row, neighbor_col]
-                and grid[neighbor_row, neighbor_col] != 1
             ):
-                new_cost = current_cost + 1
+                current_scanned_area = 0
+                future_scanned_area = 0
+                scanner_view = get_scanner_view(drone, neighbor_row, neighbor_col)
+
+                for scan_row, scan_col in scanner_view:
+                    if 0 <= scan_row < rows and 0 <= scan_col < cols:
+                        if scanned_grid[scan_row, scan_col] == 0:
+                            current_scanned_area += 1
+
+                future_scanned_area = simulate_potential_coverage(drone, scanned_grid, rows, cols, sims=2)
+                total_scanned_area = current_scanned_area + future_scanned_area
+                new_cost = current_cost + 5 - total_scanned_area
+                paths_considered += 1
 
                 if new_cost < costs[neighbor_row, neighbor_col]:
                     costs[neighbor_row, neighbor_col] = new_cost
                     heapq.heappush(
                         queue, (new_cost, (neighbor_row, neighbor_col), direction)
                     )
-                    # print(f"Adding to queue: ({neighbor_row}, {neighbor_col}), Facing: {direction}, Cost: {new_cost}")
 
             drone.row, drone.col = original_row, original_col
             drone.direction = original_direction
-            #scanned_grid[previous_row, previous_col] = 2
             scanned_grid[drone.row, drone.col] = 3
 
-        # print(previous_row, previous_col)
-        # print(f"Scanned grid:\n{scanned_grid}")
-        # print(f"Queue state: {queue}")
+        fuel_used += 1
 
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    
+    print(f"Fuel used: {fuel_used}")
+    print(f"Start Position: {start}")
+    print(f"End Position: {drone.row} {drone.col}")
+    print(f"Paths considered: {paths_considered}")
+    print(f"Time: {elapsed_time:.2f} seconds")
     return scanned_grid
 
+
+def simulate_potential_coverage(drone, scanned_grid, rows, cols, sims):   
+    if sims == 0:
+        return 0
+
+    original_row, original_col = drone.row, drone.col
+    original_direction = drone.direction
+    total_coverage = 0
+
+    for direction in [drone.direction, drone.turn_left(), drone.turn_right()]:
+        drone.row, drone.col = original_row, original_col
+        drone.direction = original_direction
+
+        if direction == drone.direction:
+            drone.move_straight()
+        elif direction == drone.turn_left():
+            drone.turn_left()
+            drone.move_straight()
+        elif direction == drone.turn_right():
+            drone.turn_right()
+            drone.move_straight()
+
+        neighbor_row, neighbor_col = drone.row, drone.col
+
+        scanner_view = get_scanner_view(drone, neighbor_row, neighbor_col)
+
+        for scan_row, scan_col in scanner_view:
+            if 0 <= scan_row < rows and 0 <= scan_col < cols:
+                if scanned_grid[scan_row, scan_col] == 0:
+                    total_coverage += 2
+
+
+        total_coverage += simulate_potential_coverage(drone, scanned_grid, rows, cols, sims - 1)
+
+    drone.row, drone.col = original_row, original_col
+    drone.direction = original_direction
+
+    return total_coverage
+
+def get_scanner_view(drone, neighbor_row, neighbor_col):
+    #Drone chooses based off info slightly outside scanner range
+    if drone.direction == Direction.UP:
+        return [
+            (neighbor_row - 1, neighbor_col - 2), (neighbor_row - 1, neighbor_col - 1), (neighbor_row - 1, neighbor_col),
+            (neighbor_row - 1, neighbor_col + 1), (neighbor_row - 1, neighbor_col + 2),
+            (neighbor_row - 2, neighbor_col - 2), (neighbor_row - 2, neighbor_col - 1), (neighbor_row - 2, neighbor_col),
+            (neighbor_row - 2, neighbor_col + 1), (neighbor_row - 2, neighbor_col + 2),
+            (neighbor_row - 3, neighbor_col - 1), (neighbor_row - 3, neighbor_col), (neighbor_row - 3, neighbor_col + 1)
+        ]
+    elif drone.direction == Direction.DOWN:
+        return [
+            (neighbor_row + 1, neighbor_col - 2), (neighbor_row + 1, neighbor_col - 1), (neighbor_row + 1, neighbor_col),
+            (neighbor_row + 1, neighbor_col + 1), (neighbor_row + 1, neighbor_col + 2),
+            (neighbor_row + 2, neighbor_col - 2), (neighbor_row + 2, neighbor_col - 1), (neighbor_row + 2, neighbor_col),
+            (neighbor_row + 2, neighbor_col + 1), (neighbor_row + 2, neighbor_col + 2),
+            (neighbor_row + 3, neighbor_col - 1), (neighbor_row + 3, neighbor_col), (neighbor_row + 3, neighbor_col + 1)
+        ]
+    elif drone.direction == Direction.LEFT:
+        return [
+            (neighbor_row - 2, neighbor_col - 1), (neighbor_row - 1, neighbor_col - 1), (neighbor_row, neighbor_col - 1),
+            (neighbor_row + 1, neighbor_col - 1), (neighbor_row + 2, neighbor_col - 1),
+            (neighbor_row - 2, neighbor_col - 2), (neighbor_row - 1, neighbor_col - 2), (neighbor_row, neighbor_col - 2),
+            (neighbor_row + 1, neighbor_col - 2), (neighbor_row + 2, neighbor_col - 2),
+            (neighbor_row - 1, neighbor_col - 3), (neighbor_row, neighbor_col - 3), (neighbor_row + 1, neighbor_col - 3)
+        ]
+    elif drone.direction == Direction.RIGHT:
+        return [
+            (neighbor_row - 2, neighbor_col + 1), (neighbor_row - 1, neighbor_col + 1), (neighbor_row, neighbor_col + 1),
+            (neighbor_row + 1, neighbor_col + 1), (neighbor_row + 2, neighbor_col + 1),
+            (neighbor_row - 2, neighbor_col + 2), (neighbor_row - 1, neighbor_col + 2), (neighbor_row, neighbor_col + 2),
+            (neighbor_row + 1, neighbor_col + 2), (neighbor_row + 2, neighbor_col + 2),
+            (neighbor_row - 1, neighbor_col + 3), (neighbor_row, neighbor_col + 3), (neighbor_row + 1, neighbor_col + 3)
+        ]
 
 if __name__ == "__main__":
     generated_grid_filepath = pathlib.Path(
@@ -124,13 +210,13 @@ if __name__ == "__main__":
             )
         )
     start = (0, 0)
-    fuel = 900
+    fuel = 400
     scanned_grid = grid.copy()
     scanned_grid = dijkstra_scan(
         grid, fuel, scanned_grid, Drone(grid, start_row, start_col)
     )
-    print("Final scanned grid:")
-    print(scanned_grid)
+    """print("Final scanned grid:")
+    print(scanned_grid)"""
     print(f"Coverage: {calculate_coverage(scanned_grid, grid):.2f}%")
 
     # Ensure the output directory exists
@@ -152,5 +238,5 @@ if __name__ == "__main__":
         f"{output_dir}results_d.png",
     )
 
-# TODO detect obstacles and avoid, improve logic behind path selection (Chosing the path with the most land to scan), prevent diagonal movement, make drone.py detect walls
+# TODO detect obstacles and avoid, possibly improve cost function to be based off more than just what's in scanner range
 # To run code be in /workspaces/Team-I-Ground-to-air-Search# python -m AirToGroundSearch.src.algorithms.d_search

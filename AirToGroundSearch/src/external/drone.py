@@ -60,22 +60,22 @@ def update_scanned_grid(drone, scanned_grid):
     if drone.direction == Direction.UP:
         view = [
             (drone.row - 1, drone.col - 1), (drone.row - 1, drone.col), (drone.row - 1, drone.col + 1),
-            (drone.row, drone.col - 1), (drone.row, drone.col), (drone.row, drone.col + 1)
+            (drone.row - 2, drone.col - 1), (drone.row - 2, drone.col), (drone.row - 2, drone.col + 1)
         ]
     elif drone.direction == Direction.DOWN:
         view = [
             (drone.row + 1, drone.col - 1), (drone.row + 1, drone.col), (drone.row + 1, drone.col + 1),
-            (drone.row, drone.col - 1), (drone.row, drone.col), (drone.row, drone.col + 1)
+            (drone.row + 2, drone.col - 1), (drone.row + 2, drone.col), (drone.row + 2, drone.col + 1)
         ]
     elif drone.direction == Direction.LEFT:
         view = [
             (drone.row - 1, drone.col - 1), (drone.row, drone.col - 1), (drone.row + 1, drone.col - 1),
-            (drone.row - 1, drone.col), (drone.row, drone.col), (drone.row + 1, drone.col)
+            (drone.row - 1, drone.col - 2), (drone.row, drone.col - 2), (drone.row + 1, drone.col - 2)
         ]
     elif drone.direction == Direction.RIGHT:
         view = [
             (drone.row - 1, drone.col + 1), (drone.row, drone.col + 1), (drone.row + 1, drone.col + 1),
-            (drone.row - 1, drone.col), (drone.row, drone.col), (drone.row + 1, drone.col)
+            (drone.row - 1, drone.col + 2), (drone.row, drone.col + 2), (drone.row + 1, drone.col + 2)
         ]
 
     for r, c in view:
