@@ -13,18 +13,36 @@ Location = Tuple[int, int]
 Direction = {"N": 1, "S": -1, "E": 1, "W": -1}
 
 
+def h(cell_cov_goal, num_cells_explored, range_m, range_n, fuel_range, fuel_used):
+    m = range_m + 1
+    if range_n // 2 <= m:
+        a = range_n // 2 + 1
+        b = range_n // 2
+    else:
+        a = m
+        b = m
+
+    max_coverage_per_cell = range_m * range_n - a * b
+    movements_left = fuel_range - fuel_used
+    cells_needed = cell_cov_goal - num_cells_explored
+
+    cost = cells_needed / max_coverage_per_cell
+
+    if cost > movements_left:
+        return math.inf
+
+    return cost
+
+
 class Cell:
-    @staticmethod
-    def h(goal_condition, cells_explored):
-        return goal_condition - cells_explored
 
     def __init__(
         self,
         current: Location,
         direction: Literal["N", "S", "E", "W"],
-        goal_condition: int,
+        heuristic_cost: int | float = math.inf,
         g_score: float = math.inf,
-        explored: set[Location] = set(),
+        fuel_used: int = 0
         # navigated_to: list[Location] = [],
         # came_from: Location | None = None,
     ):
@@ -34,31 +52,34 @@ class Cell:
         # self.navigated_to = navigated_to
         # if came_from:
         #     self.navigated_to.append(came_from)
-        self.goal_condition = goal_condition
+
+        self.fuel_used = fuel_used
 
         self.g_score = g_score
 
-        self.f_score = self.h(goal_condition, len(explored))
+        self.f_score = self.g_score + heuristic_cost
 
     def __lt__(self, other):
-        return self.f_score < other.f_score
+        if isinstance(other, Cell):
+            return self.f_score < other.f_score
+        else:
+            return False
 
     def __repr__(self):
-        return (
-            f"PriorityItem(f_score={self.f_score}, data=({self.m, self.n, self.dir}))"
-        )
+        return f"PriorityItem(f_score={self.f_score}, g_score=({self.g_score}), data=({self.m, self.n, self.dir}))"
 
     def __eq__(self, other):
         if isinstance(other, Cell):
-            return (self.m, self.n, self.dir, self.f_score) == (
+            return (self.m, self.n, self.dir, other.g_score, self.f_score) == (
                 other.m,
                 other.n,
                 other.dir,
+                other.g_score,
                 other.f_score,
             )
 
     def __str__(self):
-        return f"{self.m},{self.n},{self.dir},{self.f_score}"
+        return f"{self.m},{self.n},{self.dir},{self.g_score},{self.f_score}"
 
     def __hash__(self):
         return hash(str(self))
@@ -76,9 +97,9 @@ class Cell:
         elif self.m - i == 0 and self.n - j < 0:
             return "W"
 
-    def update_scores(self, explored, g_score: float):
+    def update_scores(self, g_score: float, heuristic_cost):
         self.g_score = g_score
-        self.f_score = self.h(self.goal_condition, len(explored))
+        self.f_score = g_score + heuristic_cost
 
     def reached_goal(self, explored, goal_condition: float):
         return len(explored) >= goal_condition
@@ -87,7 +108,9 @@ class Cell:
         m, n, dir = self.m, self.n, self.dir
         explored = set()
         if dir == "N" or dir == "S":
-            for j in range(n - (range_col // 2), n + (range_col // 2) + 1, Direction[dir]):
+            for j in range(
+                n - (range_col // 2), n + (range_col // 2) + 1, Direction[dir]
+            ):
                 for i in range(
                     m + Direction[dir], m + (range_row * Direction[dir]) + 1
                 ):
@@ -98,7 +121,9 @@ class Cell:
                         break
         else:
             for i in range(m - (range_row // 2), m + (range_row // 2) + 1):
-                for j in range(n + Direction[dir], n + (Direction[dir] * range_col), Direction[dir]):
+                for j in range(
+                    n + Direction[dir], n + (Direction[dir] * range_col), Direction[dir]
+                ):
                     if i < 0 or i >= grid.m or j < 0 or j >= grid.n:
                         continue
                     explored.add((i, j))
@@ -117,7 +142,7 @@ def backtrace_path(grid: TwoDimGraph, current: Cell, came_from: dict, explored):
     while cell_key in came_from:
         path.append(cell_key)
         cell_key = came_from[cell_key]
-    path
+
     for cell in path:
         i, j = cell.m, cell.n
         output_grid[i][j] = 3
@@ -150,7 +175,7 @@ def a_star_search(
     radar_range: Tuple[int, int],
     fuel_range: int,
     direction: Literal["N", "S", "E", "W"] = "N",  # N, S, E, W
-    goal_condition: int = 10,
+    goal_condition: int = 80,
 ):
     start_row, start_col = start_index
     range_row, range_col = radar_range
@@ -158,7 +183,7 @@ def a_star_search(
     first = Cell(
         (start_row, start_col),
         direction,
-        goal_condition,
+        heuristic_cost=h(goal_condition, 0, range_row, range_col, fuel_range, 0),
         g_score=0,
     )
 
@@ -178,6 +203,8 @@ def a_star_search(
 
     best = first
 
+    print(first)
+
     while open_set:
         # Pop cell of lowest fscore value
         current: Cell = heappop(open_set)
@@ -187,7 +214,8 @@ def a_star_search(
         new_explored = current.scan_area(grid, range_row, range_col)
         explored[current] = explored[current].union(new_explored)
 
-        if current.f_score < best.f_score:
+        if len(explored[current]) > len(explored[best]):
+            print(current, len(explored[current]))
             best = current
 
         # Check if cell meets goal condition
@@ -195,24 +223,36 @@ def a_star_search(
             print(f"coverage: {(goal_condition / grid.grid_size()) * 100}")
             return backtrace_path(grid, current, came_from, explored[current])
 
-        if current.g_score + 1 >= fuel_range:
+        if current.fuel_used + 1 >= fuel_range:
             continue
 
         # Check neighbors
         # m, n, dir = current.m, current.n, current.dir
         for i, j in grid.get_neighbors(current.m, current.n):
             new_dir = current.get_dir_neighbor(i, j)
-            new_g_score = current.g_score + 1
+            new_fuel_used = current.fuel_used + 1
+            new_g_score = new_fuel_used / len(explored[current])
             # new_neighbor = (i, j, new_dir)
             new_neighbor = Cell(
                 (i, j),
                 new_dir,
-                goal_condition,
-                explored=explored[current],
-                g_score=current.g_score + 1,
+                g_score=new_g_score,
+                fuel_used=new_fuel_used,
+                heuristic_cost=h(
+                    goal_condition,
+                    len(explored[current]),
+                    range_row,
+                    range_col,
+                    fuel_range,
+                    new_fuel_used,
+                ),
             )
             # Elimination conditions
-            if new_neighbor in came_from or grid.is_val(i, j, 1):
+            if (
+                new_neighbor in came_from
+                or grid.is_val(i, j, 1)
+                or new_neighbor.f_score == math.inf
+            ):
                 continue
 
             if new_neighbor not in g_scores or new_g_score < g_scores[new_neighbor]:
