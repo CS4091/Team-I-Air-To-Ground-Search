@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "J1d5QOb09lVWx75HAnMUl+acaDWDpnypdiQBx2wygJs=",
+  "Hash": "s6kuPGCU/xTOQvErrIubaCbpiqRaPgGlXzxM5S4WfNw=",
   "Source": "AirToGroundSearch",
   "BasePath": "_content/AirToGroundSearch",
   "Mode": "Default",
@@ -131,6 +131,25 @@
       "OriginalItemSpec": "wwwroot/favicon.png"
     },
     {
+      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/logo.png",
+      "SourceId": "AirToGroundSearch",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
+      "BasePath": "_content/AirToGroundSearch",
+      "RelativePath": "logo.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/logo.png"
+    },
+    {
       "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/.gitignore",
       "SourceId": "AirToGroundSearch",
       "SourceType": "Discovered",
@@ -148,25 +167,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/outputs/GeneratedGrid/.gitignore"
-    },
-    {
-      "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.zip",
-      "SourceId": "AirToGroundSearch",
-      "SourceType": "Discovered",
-      "ContentRoot": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/",
-      "BasePath": "_content/AirToGroundSearch",
-      "RelativePath": "outputs/GeneratedGrid/grid_world.zip",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/outputs/GeneratedGrid/grid_world.zip"
     },
     {
       "Identity": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/.gitignore",

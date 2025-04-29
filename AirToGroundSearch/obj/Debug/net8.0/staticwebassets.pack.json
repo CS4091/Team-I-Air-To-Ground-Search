@@ -21,12 +21,12 @@
       "PackagePath": "staticwebassets/favicon.png"
     },
     {
-      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/.gitignore",
-      "PackagePath": "staticwebassets/outputs/GeneratedGrid/.gitignore"
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/logo.png",
+      "PackagePath": "staticwebassets/logo.png"
     },
     {
-      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.zip",
-      "PackagePath": "staticwebassets/outputs/GeneratedGrid/grid_world.zip"
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/.gitignore",
+      "PackagePath": "staticwebassets/outputs/GeneratedGrid/.gitignore"
     },
     {
       "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/.gitignore",
