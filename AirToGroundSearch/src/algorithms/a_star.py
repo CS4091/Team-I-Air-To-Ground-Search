@@ -187,7 +187,11 @@ def a_star_search(
         g_score=0,
     )
 
-    print("Scannable cells:", grid.n_count(0), f", Coverage Condition: {goal_condition} cells")
+    print(
+        "Scannable cells:",
+        grid.n_count(0),
+        f", Coverage Condition: {goal_condition} cells",
+    )
 
     open_set = []
     heapify(open_set)
@@ -195,7 +199,7 @@ def a_star_search(
         open_set,
         first,
     )
-
+    numOfPaths = 0
     open_set_lookup = set()
     open_set_lookup.add(first)
 
@@ -205,9 +209,8 @@ def a_star_search(
 
     best = first
 
-    print(first)
-
     while open_set:
+        numOfPaths += 1
         # Pop cell of lowest fscore value
         current: Cell = heappop(open_set)
         open_set_lookup.remove(current)
@@ -217,12 +220,14 @@ def a_star_search(
         explored[current] = explored[current].union(new_explored)
 
         if len(explored[current]) > len(explored[best]):
-            print("Current Best Path:", current, len(explored[current]))
             best = current
 
         # Check if cell meets goal condition
         if current.reached_goal(explored[current], goal_condition):
-            print(f"coverage: {(goal_condition / grid.grid_size()) * 100}")
+            print(f"Fuel used: {current.fuel_used}")
+            print(f"Explored cells: {len(explored[current])}")
+            print(f"Total grid coverage: {(goal_condition / grid.n_count(0)) * 100}%")
+            print(f"Number of paths considered: {numOfPaths}")
             return backtrace_path(grid, current, came_from, explored[current])
 
         if current.fuel_used + 1 >= fuel_range:
@@ -274,7 +279,3 @@ def a_star_search(
 
     backtrace_path(grid, best, came_from)
     return False
-
-
-if __name__ == "__main__":
-    print("TEST")

@@ -37,7 +37,9 @@ def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: 
     start_time = time.time()
 
     while calculate_coverage(scanned_grid, grid) <= 80 and fuel_used < fuel:
-        current_cost, (current_row, current_col), current_direction = heapq.heappop(queue)
+        current_cost, (current_row, current_col), current_direction = heapq.heappop(
+            queue
+        )
 
         if visited[current_row, current_col]:
             continue
@@ -86,7 +88,9 @@ def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: 
                         if scanned_grid[scan_row, scan_col] == 0:
                             current_scanned_area += 1
 
-                future_scanned_area = simulate_potential_coverage(drone, scanned_grid, rows, cols, sims=2)
+                future_scanned_area = simulate_potential_coverage(
+                    drone, scanned_grid, rows, cols, sims=2
+                )
                 total_scanned_area = current_scanned_area + future_scanned_area
                 new_cost = current_cost + 5 - total_scanned_area
                 paths_considered += 1
@@ -105,7 +109,7 @@ def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: 
 
     end_time = time.time()
     elapsed_time = end_time - start_time
-    
+
     print(f"Fuel used: {fuel_used}")
     print(f"Start Position: {start}")
     print(f"End Position: {drone.row} {drone.col}")
@@ -114,7 +118,7 @@ def dijkstra_scan(grid: np.ndarray, fuel: int, scanned_grid: np.ndarray, drone: 
     return scanned_grid
 
 
-def simulate_potential_coverage(drone, scanned_grid, rows, cols, sims):   
+def simulate_potential_coverage(drone, scanned_grid, rows, cols, sims):
     if sims == 0:
         return 0
 
@@ -144,48 +148,83 @@ def simulate_potential_coverage(drone, scanned_grid, rows, cols, sims):
                 if scanned_grid[scan_row, scan_col] == 0:
                     total_coverage += 2
 
-
-        total_coverage += simulate_potential_coverage(drone, scanned_grid, rows, cols, sims - 1)
+        total_coverage += simulate_potential_coverage(
+            drone, scanned_grid, rows, cols, sims - 1
+        )
 
     drone.row, drone.col = original_row, original_col
     drone.direction = original_direction
 
     return total_coverage
 
+
 def get_scanner_view(drone, neighbor_row, neighbor_col):
-    #Drone chooses based off info slightly outside scanner range
+    # Drone chooses based off info slightly outside scanner range
     if drone.direction == Direction.UP:
         return [
-            (neighbor_row - 1, neighbor_col - 2), (neighbor_row - 1, neighbor_col - 1), (neighbor_row - 1, neighbor_col),
-            (neighbor_row - 1, neighbor_col + 1), (neighbor_row - 1, neighbor_col + 2),
-            (neighbor_row - 2, neighbor_col - 2), (neighbor_row - 2, neighbor_col - 1), (neighbor_row - 2, neighbor_col),
-            (neighbor_row - 2, neighbor_col + 1), (neighbor_row - 2, neighbor_col + 2),
-            (neighbor_row - 3, neighbor_col - 1), (neighbor_row - 3, neighbor_col), (neighbor_row - 3, neighbor_col + 1)
+            (neighbor_row - 1, neighbor_col - 2),
+            (neighbor_row - 1, neighbor_col - 1),
+            (neighbor_row - 1, neighbor_col),
+            (neighbor_row - 1, neighbor_col + 1),
+            (neighbor_row - 1, neighbor_col + 2),
+            (neighbor_row - 2, neighbor_col - 2),
+            (neighbor_row - 2, neighbor_col - 1),
+            (neighbor_row - 2, neighbor_col),
+            (neighbor_row - 2, neighbor_col + 1),
+            (neighbor_row - 2, neighbor_col + 2),
+            (neighbor_row - 3, neighbor_col - 1),
+            (neighbor_row - 3, neighbor_col),
+            (neighbor_row - 3, neighbor_col + 1),
         ]
     elif drone.direction == Direction.DOWN:
         return [
-            (neighbor_row + 1, neighbor_col - 2), (neighbor_row + 1, neighbor_col - 1), (neighbor_row + 1, neighbor_col),
-            (neighbor_row + 1, neighbor_col + 1), (neighbor_row + 1, neighbor_col + 2),
-            (neighbor_row + 2, neighbor_col - 2), (neighbor_row + 2, neighbor_col - 1), (neighbor_row + 2, neighbor_col),
-            (neighbor_row + 2, neighbor_col + 1), (neighbor_row + 2, neighbor_col + 2),
-            (neighbor_row + 3, neighbor_col - 1), (neighbor_row + 3, neighbor_col), (neighbor_row + 3, neighbor_col + 1)
+            (neighbor_row + 1, neighbor_col - 2),
+            (neighbor_row + 1, neighbor_col - 1),
+            (neighbor_row + 1, neighbor_col),
+            (neighbor_row + 1, neighbor_col + 1),
+            (neighbor_row + 1, neighbor_col + 2),
+            (neighbor_row + 2, neighbor_col - 2),
+            (neighbor_row + 2, neighbor_col - 1),
+            (neighbor_row + 2, neighbor_col),
+            (neighbor_row + 2, neighbor_col + 1),
+            (neighbor_row + 2, neighbor_col + 2),
+            (neighbor_row + 3, neighbor_col - 1),
+            (neighbor_row + 3, neighbor_col),
+            (neighbor_row + 3, neighbor_col + 1),
         ]
     elif drone.direction == Direction.LEFT:
         return [
-            (neighbor_row - 2, neighbor_col - 1), (neighbor_row - 1, neighbor_col - 1), (neighbor_row, neighbor_col - 1),
-            (neighbor_row + 1, neighbor_col - 1), (neighbor_row + 2, neighbor_col - 1),
-            (neighbor_row - 2, neighbor_col - 2), (neighbor_row - 1, neighbor_col - 2), (neighbor_row, neighbor_col - 2),
-            (neighbor_row + 1, neighbor_col - 2), (neighbor_row + 2, neighbor_col - 2),
-            (neighbor_row - 1, neighbor_col - 3), (neighbor_row, neighbor_col - 3), (neighbor_row + 1, neighbor_col - 3)
+            (neighbor_row - 2, neighbor_col - 1),
+            (neighbor_row - 1, neighbor_col - 1),
+            (neighbor_row, neighbor_col - 1),
+            (neighbor_row + 1, neighbor_col - 1),
+            (neighbor_row + 2, neighbor_col - 1),
+            (neighbor_row - 2, neighbor_col - 2),
+            (neighbor_row - 1, neighbor_col - 2),
+            (neighbor_row, neighbor_col - 2),
+            (neighbor_row + 1, neighbor_col - 2),
+            (neighbor_row + 2, neighbor_col - 2),
+            (neighbor_row - 1, neighbor_col - 3),
+            (neighbor_row, neighbor_col - 3),
+            (neighbor_row + 1, neighbor_col - 3),
         ]
     elif drone.direction == Direction.RIGHT:
         return [
-            (neighbor_row - 2, neighbor_col + 1), (neighbor_row - 1, neighbor_col + 1), (neighbor_row, neighbor_col + 1),
-            (neighbor_row + 1, neighbor_col + 1), (neighbor_row + 2, neighbor_col + 1),
-            (neighbor_row - 2, neighbor_col + 2), (neighbor_row - 1, neighbor_col + 2), (neighbor_row, neighbor_col + 2),
-            (neighbor_row + 1, neighbor_col + 2), (neighbor_row + 2, neighbor_col + 2),
-            (neighbor_row - 1, neighbor_col + 3), (neighbor_row, neighbor_col + 3), (neighbor_row + 1, neighbor_col + 3)
+            (neighbor_row - 2, neighbor_col + 1),
+            (neighbor_row - 1, neighbor_col + 1),
+            (neighbor_row, neighbor_col + 1),
+            (neighbor_row + 1, neighbor_col + 1),
+            (neighbor_row + 2, neighbor_col + 1),
+            (neighbor_row - 2, neighbor_col + 2),
+            (neighbor_row - 1, neighbor_col + 2),
+            (neighbor_row, neighbor_col + 2),
+            (neighbor_row + 1, neighbor_col + 2),
+            (neighbor_row + 2, neighbor_col + 2),
+            (neighbor_row - 1, neighbor_col + 3),
+            (neighbor_row, neighbor_col + 3),
+            (neighbor_row + 1, neighbor_col + 3),
         ]
+
 
 if __name__ == "__main__":
     generated_grid_filepath = pathlib.Path(
@@ -210,7 +249,7 @@ if __name__ == "__main__":
             )
         )
     start = (0, 0)
-    fuel = 400
+    fuel = 100000
     scanned_grid = grid.copy()
     scanned_grid = dijkstra_scan(
         grid, fuel, scanned_grid, Drone(grid, start_row, start_col)

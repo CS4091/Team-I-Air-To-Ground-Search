@@ -5,6 +5,7 @@ import numpy as np
 from .graph import TwoDimGraph
 from ..algorithms.a_star import a_star_search
 import os
+import time
 
 
 class GridWorld:
@@ -42,6 +43,7 @@ class GridWorld:
                 self.num_moves,
             )
 
+
 def is_dead_end(r, c, grid):
     # Checks if a provided cell is dead end, meaning its
     # surrounded on 3 sides by obstacles, including the edges of the grid.
@@ -51,7 +53,6 @@ def is_dead_end(r, c, grid):
         return False  # Already an obstacle
 
     obstacle_count = 0
-
 
     neighbors = [
         (r - 1, c),  # Up
@@ -64,6 +65,7 @@ def is_dead_end(r, c, grid):
             obstacle_count += 1
 
     return obstacle_count >= 3
+
 
 def propagate_dead_ends(grid):
     # Creates and returns a copy of the grid with dead ends marked
@@ -101,6 +103,7 @@ def propagate_dead_ends(grid):
 
     return reduced_grid
 
+
 if __name__ == "__main__":
     parent = pathlib.Path(__file__).parent.parent.parent
     if os.path.exists(
@@ -114,5 +117,10 @@ if __name__ == "__main__":
             parent / "wwwroot/outputs/GeneratedGrid/data"
         ).resolve()
     world = GridWorld(grid_path)
-    print(world.world_params)
-    print(world.run_search())
+    # Start a timer
+    start_time = time.time()
+    # Run the search
+    world.run_search()
+    end_time = time.time()
+    # Print time taken up to 3 decimal places
+    print(f"Time taken: {end_time - start_time:.3f} seconds")

@@ -29,6 +29,26 @@
       "PackagePath": "staticwebassets/outputs/GeneratedGrid/.gitignore"
     },
     {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/data/grid_world.csv",
+      "PackagePath": "staticwebassets/outputs/GeneratedGrid/data/grid_world.csv"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/data/grid_world.png",
+      "PackagePath": "staticwebassets/outputs/GeneratedGrid/data/grid_world.png"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/data/grid_world.txt",
+      "PackagePath": "staticwebassets/outputs/GeneratedGrid/data/grid_world.txt"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/data/grid_world_params.json",
+      "PackagePath": "staticwebassets/outputs/GeneratedGrid/data/grid_world_params.json"
+    },
+    {
+      "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GeneratedGrid/grid_world.zip",
+      "PackagePath": "staticwebassets/outputs/GeneratedGrid/grid_world.zip"
+    },
+    {
       "Id": "/workspaces/Team-I-Air-To-Ground-Search/AirToGroundSearch/wwwroot/outputs/GridResults/.gitignore",
       "PackagePath": "staticwebassets/outputs/GridResults/.gitignore"
     },
