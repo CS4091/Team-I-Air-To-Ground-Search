@@ -55,6 +55,9 @@ class TwoDimGraph:
     
     def is_val(self, i, j, val):
         return self.get_vertex(i, j) == val
+    
+    def n_count(self, n=0):
+        return np.count_nonzero(self.vertices == n)
 
     def get_neighbors(self, i, j):
         pos = self.get_flat_pos(i, j)

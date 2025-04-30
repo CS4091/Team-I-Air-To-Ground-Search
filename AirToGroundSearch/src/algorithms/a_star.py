@@ -42,7 +42,7 @@ class Cell:
         direction: Literal["N", "S", "E", "W"],
         heuristic_cost: int | float = math.inf,
         g_score: float = math.inf,
-        fuel_used: int = 0
+        fuel_used: int = 0,
         # navigated_to: list[Location] = [],
         # came_from: Location | None = None,
     ):
@@ -79,7 +79,7 @@ class Cell:
             )
 
     def __str__(self):
-        return f"{self.m},{self.n},{self.dir},{self.g_score},{self.f_score}"
+        return f"{self.m},{self.n},{self.dir},{self.g_score:.7f},{self.f_score:.7f}"
 
     def __hash__(self):
         return hash(str(self))
@@ -175,17 +175,19 @@ def a_star_search(
     radar_range: Tuple[int, int],
     fuel_range: int,
     direction: Literal["N", "S", "E", "W"] = "N",  # N, S, E, W
-    goal_condition: int = 80,
+    goal_percent: int = 80,
 ):
     start_row, start_col = start_index
     range_row, range_col = radar_range
-    goal_condition = (grid.grid_size() // 100) * goal_condition
+    goal_condition = (grid.n_count(0) // 100) * goal_percent
     first = Cell(
         (start_row, start_col),
         direction,
         heuristic_cost=h(goal_condition, 0, range_row, range_col, fuel_range, 0),
         g_score=0,
     )
+
+    print("Scannable cells:", grid.n_count(0), f", Coverage Condition: {goal_condition} cells")
 
     open_set = []
     heapify(open_set)
@@ -197,7 +199,7 @@ def a_star_search(
     open_set_lookup = set()
     open_set_lookup.add(first)
 
-    came_from: dict[Cell, Cell] = {}
+    came_from: dict[Cell, Cell | None] = defaultdict(lambda: None)
     explored: dict[Cell, set] = {first: set()}
     g_scores: dict[Cell, int] = {first: 0}
 
@@ -215,7 +217,7 @@ def a_star_search(
         explored[current] = explored[current].union(new_explored)
 
         if len(explored[current]) > len(explored[best]):
-            print(current, len(explored[current]))
+            print("Current Best Path:", current, len(explored[current]))
             best = current
 
         # Check if cell meets goal condition
@@ -248,8 +250,14 @@ def a_star_search(
                 ),
             )
             # Elimination conditions
+            prev_m, prev_n = (
+                (came_from[current].m, came_from[current].m)
+                if came_from[current]
+                else (math.nan, math.nan)
+            )
+
             if (
-                new_neighbor in came_from
+                (new_neighbor.m, new_neighbor.n) == (prev_m, prev_n)
                 or grid.is_val(i, j, 1)
                 or new_neighbor.f_score == math.inf
             ):
