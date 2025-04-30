@@ -4,6 +4,7 @@ import numpy as np
 from heapq import heapify, heappush, heappop
 from typing import Tuple, Literal
 import pathlib
+import time
 
 from collections import defaultdict
 import math
@@ -177,9 +178,11 @@ def a_star_search(
     direction: Literal["N", "S", "E", "W"] = "N",  # N, S, E, W
     goal_percent: int = 80,
 ):
+    start_time = time.time() 
+
     start_row, start_col = start_index
     range_row, range_col = radar_range
-    goal_condition = (grid.n_count(0) // 100) * goal_percent
+    goal_condition = int((grid.n_count(0) / 100) * goal_percent)
     first = Cell(
         (start_row, start_col),
         direction,
@@ -187,7 +190,11 @@ def a_star_search(
         g_score=0,
     )
 
-    print("Scannable cells:", grid.n_count(0), f", Coverage Condition: {goal_condition} cells")
+    print(
+        "Scannable cells:",
+        grid.n_count(0),
+        f", Coverage Condition: {goal_condition} cells",
+    )
 
     open_set = []
     heapify(open_set)
@@ -205,7 +212,7 @@ def a_star_search(
 
     best = first
 
-    print(first)
+    paths_considered = 1
 
     while open_set:
         # Pop cell of lowest fscore value
@@ -217,12 +224,20 @@ def a_star_search(
         explored[current] = explored[current].union(new_explored)
 
         if len(explored[current]) > len(explored[best]):
-            print("Current Best Path:", current, len(explored[current]))
+            # print("Current Best Path:", current, len(explored[current]))
             best = current
 
         # Check if cell meets goal condition
         if current.reached_goal(explored[current], goal_condition):
-            print(f"coverage: {(goal_condition / grid.grid_size()) * 100}")
+            end_time = time.time()
+            total_time = end_time - start_time
+            print(f"fuel used: {current.fuel_used}")
+            print(
+                f"start position: ({first.m},{first.n},{first.dir}), end position: ({current.m},{current.n},{current.dir})"
+            )
+            print(f"paths considered: {paths_considered}")
+            print(f"time elapsed: {total_time:.2f}s")
+            print(f"coverage: {len(explored[current])}")
             return backtrace_path(grid, current, came_from, explored[current])
 
         if current.fuel_used + 1 >= fuel_range:
@@ -230,7 +245,7 @@ def a_star_search(
 
         # Check neighbors
         # m, n, dir = current.m, current.n, current.dir
-        for i, j in grid.get_neighbors(current.m, current.n):
+        for index, (i, j) in enumerate(grid.get_neighbors(current.m, current.n)):
             new_dir = current.get_dir_neighbor(i, j)
             new_fuel_used = current.fuel_used + 1
             new_g_score = new_fuel_used / len(explored[current])
@@ -271,6 +286,8 @@ def a_star_search(
                 if new_neighbor not in open_set:
                     heappush(open_set, new_neighbor)
                     open_set_lookup.add(new_neighbor)
+                    if index > 0:
+                        paths_considered += 1
 
     backtrace_path(grid, best, came_from)
     return False

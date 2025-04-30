@@ -114,5 +114,6 @@ if __name__ == "__main__":
             parent / "wwwroot/outputs/GeneratedGrid/data"
         ).resolve()
     world = GridWorld(grid_path)
-    print(world.world_params)
-    print(world.run_search())
+    # print(world.world_params)
+    # print(world.run_search())
+    world.run_search()
