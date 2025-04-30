@@ -42,6 +42,64 @@ class GridWorld:
                 self.num_moves,
             )
 
+def is_dead_end(r, c, grid):
+    # Checks if a provided cell is dead end, meaning its
+    # surrounded on 3 sides by obstacles, including the edges of the grid.
+    rows, cols = grid.shape
+
+    if grid[r, c] == 1:
+        return False  # Already an obstacle
+
+    obstacle_count = 0
+
+
+    neighbors = [
+        (r - 1, c),  # Up
+        (r + 1, c),  # Down
+        (r, c - 1),  # Left
+        (r, c + 1),  # Right
+    ]
+    for nr, nc in neighbors:
+        if not (0 <= nr < rows and 0 <= nc < cols) or grid[nr, nc] == 1:
+            obstacle_count += 1
+
+    return obstacle_count >= 3
+
+def propagate_dead_ends(grid):
+    # Creates and returns a copy of the grid with dead ends marked
+    # as unnavigable. They then propogate out until no more dead ends exist
+
+    rows, cols = grid.shape
+    reduced_grid = grid.copy()  # Create a copy of the grid
+
+    def back_propagate_dead_end(r, c):
+        # Recursvively marks dead ends as propagate outwards
+        if not (0 <= r < rows and 0 <= c < cols) or reduced_grid[r, c] == 1:
+            return
+
+        if not is_dead_end(r, c, reduced_grid):
+            return
+
+        # Mark the current cell as unnavigable
+        reduced_grid[r, c] = 1
+
+        # Recursively propagate to neighbors
+        neighbors = [
+            (r - 1, c),  # Up
+            (r + 1, c),  # Down
+            (r, c - 1),  # Left
+            (r, c + 1),  # Right
+        ]
+        for nr, nc in neighbors:
+            back_propagate_dead_end(nr, nc)
+
+    # Start by checking all cells for dead ends
+    for i in range(rows):
+        for j in range(cols):
+            if reduced_grid[i, j] == 0 and is_dead_end(i, j, reduced_grid):
+                back_propagate_dead_end(i, j)
+
+    return reduced_grid
 
 if __name__ == "__main__":
     parent = pathlib.Path(__file__).parent.parent.parent
