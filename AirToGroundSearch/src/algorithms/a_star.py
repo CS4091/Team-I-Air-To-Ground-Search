@@ -26,7 +26,7 @@ def h(cell_cov_goal, num_cells_explored, range_m, range_n, fuel_range, fuel_used
     movements_left = fuel_range - fuel_used
     cells_needed = cell_cov_goal - num_cells_explored
 
-    cost = cells_needed / max_coverage_per_cell
+    cost = cells_needed // max_coverage_per_cell
 
     if cost > movements_left:
         return math.inf
@@ -220,6 +220,7 @@ def a_star_search(
         explored[current] = explored[current].union(new_explored)
 
         if len(explored[current]) > len(explored[best]):
+            print ("Current Best:", current, len(explored[current]))
             best = current
 
         # Check if cell meets goal condition
@@ -238,8 +239,7 @@ def a_star_search(
         for i, j in grid.get_neighbors(current.m, current.n):
             new_dir = current.get_dir_neighbor(i, j)
             new_fuel_used = current.fuel_used + 1
-            new_g_score = new_fuel_used / len(explored[current])
-            # new_neighbor = (i, j, new_dir)
+            new_g_score = current.g_score + 1 - (len(new_explored) / (range_row * range_col))
             new_neighbor = Cell(
                 (i, j),
                 new_dir,
