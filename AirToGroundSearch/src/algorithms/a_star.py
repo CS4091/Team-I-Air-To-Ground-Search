@@ -187,12 +187,7 @@ def a_star_search(
         g_score=0,
     )
 
-    print(
-        "Scannable cells:",
-        grid.n_count(0),
-        f", Coverage Condition: {goal_condition} cells",
-    )
-
+    print("Scannable cells:", grid.n_count(0))
     open_set = []
     heapify(open_set)
     heappush(
@@ -227,7 +222,9 @@ def a_star_search(
         if current.reached_goal(explored[current], goal_condition):
             print(f"Fuel used: {current.fuel_used}")
             print(f"Explored cells: {len(explored[current])}")
-            print(f"Total grid coverage: {(goal_condition / grid.n_count(0)) * 100}%")
+            print(
+                f"Total grid coverage: {(goal_condition / grid.n_count(0)) * 100:.3f}%"
+            )
             print(f"Number of paths considered: {numOfPaths}")
             return backtrace_path(grid, current, came_from, explored[current])
 
