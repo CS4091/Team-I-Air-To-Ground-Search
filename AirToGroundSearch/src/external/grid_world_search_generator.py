@@ -131,8 +131,8 @@ def write_problem_params(
     output_filepath: pathlib.Path,
     grid: np.ndarray,
     fuel_range=0.4,
-    forward_range=3,
-    lateral_width=7,
+    forward_range=2,
+    lateral_width=3,
 ):
     row, col = find_start_coordinate(grid)
     num_cells = grid.size
