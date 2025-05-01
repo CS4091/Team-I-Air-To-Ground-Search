@@ -36,24 +36,32 @@
 
     @if (aStarGenerated)
     {
-        <div class="col-md-6">
-            <h3>A* Results</h3>
-            @foreach (var line in File.ReadLines("./wwwroot/outputs/GridResults/ASTAR_Results/results_a.txt"))
-            {
-                <p>@line</p>
-            }
-            <a class="btn btn-primary" style="margin-bottom: 1rem" href="@aStarZipFilePath" download="ASTAR_Results.zip">Download A* Results</a>
+        <div class="col-md-6 text-center">
+            <div class="mb-3">
+                <h3 class="fw-bold fs-4">A* Results</h3>
+            </div>
+            <div class="mb-2">
+                @foreach (var line in File.ReadLines("./wwwroot/outputs/GridResults/ASTAR_Results/results_a.txt"))
+                {
+                    <p class="mb-1 fs-5">@line</p>
+                }
+            </div>
+            <a class="btn btn-primary btn-lg" style="margin-bottom: 1rem" href="@aStarZipFilePath" download="ASTAR_Results.zip">Download A* Results</a>
         </div>
     }
     @if (dijkstraGenerated)
     {
-        <div class="col-md-6">
-            <h3>Dijkstra Results</h3>
-            @foreach (var line in File.ReadLines("./wwwroot/outputs/GridResults/Dijkstra_Results/results_d.txt"))
-            {
-                <p>@line</p>
-            }
-            <a class="btn btn-primary" style="margin-bottom: 1rem" href="@dijkstraZipFilePath" download="Dijkstra_Results.zip">Download Dijkstra Results</a>
+        <div class="col-md-6 text-center">
+            <div class="mb-3">
+                <h3 class="fw-bold fs-4">Dijkstra Results</h3>
+            </div>
+            <div class="mb-2">
+                @foreach (var line in File.ReadLines("./wwwroot/outputs/GridResults/Dijkstra_Results/results_d.txt"))
+                {
+                    <p class="mb-1 fs-5">@line</p>
+                }
+            </div>
+            <a class="btn btn-primary btn-lg" style="margin-bottom: 1rem" href="@dijkstraZipFilePath" download="Dijkstra_Results.zip">Download Dijkstra Results</a>
         </div>
     }
 
