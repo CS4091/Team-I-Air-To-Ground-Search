@@ -236,7 +236,7 @@ def a_star_search(
         for i, j in grid.get_neighbors(current.m, current.n):
             new_dir = current.get_dir_neighbor(i, j)
             new_fuel_used = current.fuel_used + 1
-            new_g_score = current.g_score + 1 - (len(new_explored) / (range_row * range_col))
+            new_g_score = new_fuel_used / len(explored[current])
             new_neighbor = Cell(
                 (i, j),
                 new_dir,
