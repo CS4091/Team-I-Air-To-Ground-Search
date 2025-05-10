@@ -34,6 +34,6 @@ aircraft simultaneously.
 1. Install Docker Desktop
 2. Launch Repo in VS Code
 3. Re-open in container
-4. Find Program.CS in the Air-To-Ground Directory
+4. Find Program.cs in the AirToGroundSearch Directory
 5. Click the play button in the top right
 6. The web app should open in your default browser
