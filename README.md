@@ -28,3 +28,12 @@ within this constraint.
 3. What if we had two vehicles? Come up with routes that optimizes scanning the grid world using both
 aircraft simultaneously.
 4. Create a mechanism to visualize the problem and solution(s).
+
+
+## How to Use
+1. Install Docker Desktop
+2. Launch Repo in VS Code
+3. Re-open in container
+4. Find Program.CS in the Air-To-Ground Directory
+5. Click the play button in the top right
+6. The web app should open in your default browser
